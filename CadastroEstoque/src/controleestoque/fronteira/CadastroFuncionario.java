@@ -1,0 +1,210 @@
+
+package controleestoque.fronteira;
+
+import cadastroestoque.Entidades.Funcionario;
+import cadastroestoque.armazenamento.ArmazenamentoFuncionario;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Scanner;
+
+public class CadastroFuncionario {
+    private static final short OPCAO_INSERIR = 1;
+    private static final short OPCAO_LISTAR = 2;
+    private static final short OPCAO_ALTERAR = 3;
+    private static final short OPCAO_EXCLUIR = 4;
+    private static final short OPCAO_VOLTAR_MENU_PRINCIPAL = 5;
+    
+    private Scanner input;
+    
+    public void exibirMenu() {
+        input = new Scanner(System.in);
+        short opcao = 0;
+        while (opcao != OPCAO_VOLTAR_MENU_PRINCIPAL) {
+            System.out.println("\n\nOpções do Cadastro de Funcionário:");
+            System.out.println("1 - Inserir");
+            System.out.println("2 - Listar");
+            System.out.println("3 - Alterar");
+            System.out.println("4 - Excluir");
+            System.out.println("5 - Voltar ao Menu Principal");            
+            System.out.print("----> Escolha a sua opção: ");
+            
+            opcao = input.nextShort();
+            ProcessarOpcaoUsuario(opcao);
+        }
+    }
+    
+    private void ProcessarOpcaoUsuario(short opcao) {
+        switch (opcao) {
+            case OPCAO_INSERIR:
+                inserir();
+                break;
+            case OPCAO_LISTAR:
+                listar();
+                break;
+            case OPCAO_ALTERAR:
+                alterar();
+                break;
+            case OPCAO_EXCLUIR:
+                excluir();
+                break;
+            default:
+                if (opcao != OPCAO_VOLTAR_MENU_PRINCIPAL){
+                    System.err.println("Opção inválida/inexistente.");
+                }
+        }
+    }
+    
+    private void inserir() {
+        System.out.println("\nInserir novo registro de funcionário\n");
+        
+        System.out.print("- Código: ");
+        long codigo = input.nextLong();
+        input.nextLine(); // Consumindo quebra de linha
+        
+        System.out.print("- Nome: ");
+        String nome = input.nextLine();
+        
+        System.out.print("- CPF: ");
+        long cpf = input.nextLong();
+        input.nextLine(); // Consumindo quebra de linha
+        
+        System.out.print("- Endereço: ");
+        String endereco = input.nextLine();
+        
+        System.out.print("- Telefone: ");
+        String telefone = input.nextLine();
+        
+        System.out.print("- E-mail: ");
+        String email = input.nextLine();
+        
+        Funcionario novoFuncionario = new Funcionario(codigo, nome, cpf, endereco, telefone, email);
+        ArmazenamentoFuncionario.inserir(novoFuncionario);
+    }
+    
+    private static String formatarCpf(long cpf) {
+        String cpfFormatado = "";
+        // XXX.XXX.XXX-YY
+        NumberFormat nf = new DecimalFormat("00000000000");
+        StringBuilder sb = new StringBuilder(nf.format(cpf));
+        sb.insert(3, '.');
+        sb.insert(7, '.');
+        sb.insert(11, '-');
+        cpfFormatado = sb.toString();
+        
+        return cpfFormatado;
+    }
+    
+    private void listar() {
+        System.out.println("\nListagem de funcionários registrados\n");
+        System.out.println("+--------+--------------------------+--------------------+-------------------------+---------------+---------------------+");
+        System.out.println("| CÓDIGO |          NOME            |        CPF         |         ENDEREÇO        |    TELEFONE   |        E-MAIL       |");
+        System.out.println("+--------+--------------------------+--------------------+-------------------------+---------------+---------------------+");
+        for (Funcionario f : ArmazenamentoFuncionario.getLista()) {
+            System.out.printf("| %6d | %26s | %20d | %25s | %15s | %21s |\n", 
+                            f.getCodigo(), f.getNome(), formatarCpf(f.getCpf()), f.getEndereco(), f.getTelefone(), f.getEmail());
+        }
+        System.out.println("+--------+--------------------------+--------------------+-------------------------+---------------+---------------------+");
+    }
+    
+    private void alterar() {
+        System.out.println("\nAlterar o registro do funcionário de\n");
+        System.out.print("- Código: ");
+        long codigo = input.nextLong();
+        
+        Funcionario f = new Funcionario(codigo, "", 0, "", "", "");
+        Funcionario funcionarioParaAlterar = ArmazenamentoFuncionario.buscar(f);
+        
+        if (funcionarioParaAlterar != null) {
+            System.out.println("\n - NOME: " + funcionarioParaAlterar.getNome());
+            System.out.print("---> Deseja alterar o nome? (s = sim / n = não): ");            
+            input.nextLine(); // Consumindo quebra de linha
+            char opcaoNome = input.nextLine().charAt(0);
+            String nome = funcionarioParaAlterar.getNome();
+            if (opcaoNome == 's') {
+                System.out.print("- Novo Nome: ");
+                nome = input.nextLine();
+            }
+            
+            System.out.println("\n - CPF: " + funcionarioParaAlterar.getCpf());
+            System.out.print("---> Deseja alterar o CPF? (s = sim / n = não): ");            
+            char opcaoCpf = input.nextLine().charAt(0);
+            long cpf = funcionarioParaAlterar.getCpf();
+            if (opcaoCpf == 's') {
+                System.out.print("- Novo CPF: ");
+                cpf = input.nextLong();
+            }
+            
+            System.out.println("\n - ENDEREÇO: " + funcionarioParaAlterar.getEndereco());
+            System.out.print("---> Deseja alterar o endereço? (s = sim / n = não): ");
+            input.nextLine(); // Consumindo quebra de linha
+            char opcaoEndereco = input.nextLine().charAt(0);
+            String endereco = funcionarioParaAlterar.getEndereco();
+            if (opcaoEndereco == 's') {
+                System.out.print("- Novo Endereço: ");
+                endereco = input.nextLine();
+            }
+            
+            System.out.println("\n - TELEFONE: " + funcionarioParaAlterar.getTelefone());
+            System.out.print("---> Deseja alterar o telefone? (s = sim / n = não): ");            
+            char opcaoTelefone = input.nextLine().charAt(0);
+            String telefone = funcionarioParaAlterar.getTelefone();
+            if (opcaoTelefone == 's') {
+                System.out.print("- Novo Telefone: ");
+                telefone = input.nextLine();
+            }
+            
+            System.out.println("\n - E-MAIL: " + funcionarioParaAlterar.getEmail());
+            System.out.print("---> Deseja alterar o e-mail? (s = sim / n = não): ");            
+            char opcaoEmail = input.nextLine().charAt(0);
+            String email = funcionarioParaAlterar.getEmail();
+            if (opcaoEmail == 's') {
+                System.out.print("- Novo E-mail: ");
+                email = input.nextLine();
+            }
+            
+            System.out.println("\nDeseja realmente modificar os dados informados? (s = sim / n = não)");
+            System.out.println("- Código............: " + funcionarioParaAlterar.getCodigo());
+            System.out.println("- Nome..............: " + nome);
+            System.out.println("- CPF...............: " + cpf);
+            System.out.println("- Endereço..........: " + endereco);
+            System.out.println("- Telefone..........: " + telefone);
+            System.out.println("- E-mail............: " + email);
+            System.out.print("---> (s = sim / n = não): ");
+            char confirmacaoFinal = input.nextLine().charAt(0);
+            if (confirmacaoFinal == 's') {
+                Funcionario fornecedorAlterado = new Funcionario(codigo, nome, cpf, endereco, telefone, email);
+                ArmazenamentoFuncionario.alterar(fornecedorAlterado);
+            }
+            
+        } else {
+            System.err.println("\nFuncionário não encontrado. Código inexistente.");
+            return;
+        }
+    }
+    
+    private void excluir() {
+        System.out.println("\nExcluir o registro do funcionário de\n");
+        System.out.print("- Código: ");
+        long codigo = input.nextLong();
+        input.nextLine(); // Consumindo quebra de linha
+        Funcionario funcionarioParaDeletar = ArmazenamentoFuncionario.buscar(new Funcionario(codigo, "", 0, "", "", ""));
+        
+        if (funcionarioParaDeletar == null) {
+            System.err.println("Funcionário não encontrado. Código inexistente.");
+            return;
+        }
+        
+        System.out.println("\nDeseja realmente excluir o funcionário informado? (s = sim / n = não)");
+        System.out.println("- Código............: " + funcionarioParaDeletar.getCodigo());
+        System.out.println("- Nome..............: " + funcionarioParaDeletar.getNome());
+        System.out.println("- CPF...............: " + funcionarioParaDeletar.getCpf());
+        System.out.println("- Endereço..........: " + funcionarioParaDeletar.getEndereco());
+        System.out.println("- Telefone..........: " + funcionarioParaDeletar.getTelefone());
+        System.out.println("- E-mail............: " + funcionarioParaDeletar.getEmail());
+        System.out.print("---> (s = sim / n = não): ");
+        char confirmacaoFinal = input.nextLine().charAt(0);
+        if (confirmacaoFinal == 's') {
+            ArmazenamentoFuncionario.excluir(funcionarioParaDeletar);
+        }
+    }
+}

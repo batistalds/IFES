@@ -1,7 +1,7 @@
 
 package cadastroestoque.Entidades;
 
-public abstract class Funcionario {
+public class Funcionario {
     private long codigo;
     private String nome;
     private long cpf;

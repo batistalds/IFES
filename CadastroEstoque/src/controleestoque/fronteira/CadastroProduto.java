@@ -89,30 +89,29 @@ public class CadastroProduto {
         if (produtoParaAlterar != null) {
             System.out.println("\n - Nome: " + produtoParaAlterar.getNome());
             System.out.print("---> Deseja alterar o nome? (s = sim / n = não): ");            
-            
-            input.nextLine(); // Consumindo quebra de linha
-            
+            input.nextLine(); // Consumindo quebra de linha            
             char opcaoNome = input.nextLine().charAt(0);
-            String nome = "";
+            String nome = produtoParaAlterar.getNome();
             if (opcaoNome == 's') {
-                System.out.print("- Nome: ");
+                System.out.print("- Novo Nome: ");
                 nome = input.nextLine();
+                input.nextLine(); // Consumindo quebra de linha
             }
             
-            System.out.printf("\n - Preço: %.2f" + produtoParaAlterar.getPreco());
-            System.out.print("---> Deseja alterar o preço? (s = sim / n = não): ");
-            
+            System.out.printf("\n - Preço: %.2f", produtoParaAlterar.getPreco());
+            System.out.print("---> Deseja alterar o preço? (s = sim / n = não): ");            
             char opcaoPreco = input.nextLine().charAt(0);
-            double preco = 0;
+            double preco = produtoParaAlterar.getPreco();
             if (opcaoPreco == 's') {
-                System.out.print("- Preço: ");
+                System.out.print("- Novo Preço: ");
                 preco = input.nextDouble();
+                input.nextLine(); // Consumindo quebra de linha
             }
             
             System.out.println("\nDeseja realmente modificar os dados informados? (s = sim / n = não)");
             System.out.println("- Código: " + produtoParaAlterar.getCodigo());
-            System.out.println("- Nome: " + nome);
-            System.out.printf("- Preço: %.2f\n" + preco);
+            System.out.println("- Nome..: " + nome);
+            System.out.printf("- Preço..: %.2f\n", preco);
             System.out.print("---> (s = sim / n = não): ");
             char confirmacaoFinal = input.nextLine().charAt(0);
             if (confirmacaoFinal == 's') {
@@ -127,6 +126,25 @@ public class CadastroProduto {
     }
     
     private void excluir() {
+        System.out.println("\nExcluir o registro do produto de\n");
+        System.out.print("- Código: ");
+        long codigo = input.nextLong();
+        input.nextLine(); // Consumindo quebra de linha
+        Produto produtoParaDeletar = ArmazenamentoProduto.buscar(new Produto(codigo, "", 0));
         
+        if (produtoParaDeletar == null) {
+            System.err.println("Produto não encontrado. Código inexistente.");
+            return;
+        }
+        
+        System.out.println("\nDeseja realmente excluir o produto informado? (s = sim / n = não)");
+        System.out.println("- Código: " + produtoParaDeletar.getCodigo());
+        System.out.println("- Nome..: " + produtoParaDeletar.getNome());
+        System.out.printf("- Preço..: %.2f\n", produtoParaDeletar.getPreco());
+        System.out.print("---> (s = sim / n = não): ");
+        char confirmacaoFinal = input.nextLine().charAt(0);
+        if (confirmacaoFinal == 's') {
+            ArmazenamentoProduto.excluir(produtoParaDeletar);
+        }
     }
 }

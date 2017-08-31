@@ -36,14 +36,20 @@ public class MenuPrincipal {
     private void ProcessarOpcaoUsuario(short opcao) {
         switch (opcao) {
             case OPCAO_CADASTRO_CLIENTE:
+                CadastroCliente meuCliente = new CadastroCliente();
+                meuCliente.exibirMenu();
                 break;
             case OPCAO_CADASTRO_FORNECEDOR:
+                CadastroFornecedor meuFornecedor = new CadastroFornecedor();
+                meuFornecedor.exibirMenu();
                 break;
             case OPCAO_CADASTRO_PRODUTO:
                 CadastroProduto meuProduto = new CadastroProduto();
                 meuProduto.exibirMenu();
                 break;
             case OPCAO_CADASTRO_FUNCIONARIO:
+                CadastroFuncionario meuFuncionario = new CadastroFuncionario();
+                meuFuncionario.exibirMenu();
                 break;
             case OPCAO_CADASTRO_COMPRA:
                 break;
