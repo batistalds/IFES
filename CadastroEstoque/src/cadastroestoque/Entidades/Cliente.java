@@ -1,7 +1,7 @@
-
 package cadastroestoque.Entidades;
 
 public class Cliente {
+
     private long codigo;
     private String endereco;
     private String telefone;
@@ -45,6 +45,5 @@ public class Cliente {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
+
 }

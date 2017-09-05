@@ -1,16 +1,16 @@
-
 package cadastroestoque.Entidades;
 
 import java.util.Date;
 
 public class ClientePessoaFisica extends Cliente {
+
     private long cpf;
     private char sexo;
     private String nome;
     private Date dataNascimento;
 
     public ClientePessoaFisica(long codigo, String endereco, String telefone, String email,
-                                long cpf, char sexo, String nome, Date dataNascimento) {
+            long cpf, char sexo, String nome, Date dataNascimento) {
         super(codigo, endereco, telefone, email);
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
@@ -49,6 +49,5 @@ public class ClientePessoaFisica extends Cliente {
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
-    
-    
+
 }

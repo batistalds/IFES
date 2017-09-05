@@ -1,7 +1,7 @@
-
 package cadastroestoque.Entidades;
 
 public class Fornecedor {
+
     private long codigo;
     private String nomeFantasia;
     private String razaoSocial;
@@ -11,8 +11,8 @@ public class Fornecedor {
     private String telefone;
     private String email;
 
-    public Fornecedor(long codigo, String nomeFantasia, String razaoSocial, String endereco, long cnpj, 
-                    long inscricaoEstadual, String telefone, String email) {
+    public Fornecedor(long codigo, String nomeFantasia, String razaoSocial, String endereco, long cnpj,
+            long inscricaoEstadual, String telefone, String email) {
         this.codigo = codigo;
         this.nomeFantasia = nomeFantasia;
         this.razaoSocial = razaoSocial;
@@ -22,7 +22,7 @@ public class Fornecedor {
         this.telefone = telefone;
         this.email = email;
     }
-    
+
     public Fornecedor(long codigo) {
         this.codigo = codigo;
     }
@@ -88,9 +88,9 @@ public class Fornecedor {
     }
 
     public void setEmail(String email) {
-        if (email.indexOf("@") != -1 && email.contains(".com")) 
+        if (email.indexOf("@") != -1 && email.contains(".com")) {
             this.email = email;
+        }
     }
-    
-    
+
 }

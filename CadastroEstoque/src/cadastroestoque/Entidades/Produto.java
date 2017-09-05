@@ -1,7 +1,7 @@
-
 package cadastroestoque.Entidades;
 
 public class Produto {
+
     private long codigo;
     private String nome;
     private double preco;
@@ -11,7 +11,7 @@ public class Produto {
         this.nome = nome;
         this.preco = preco;
     }
-    
+
     public long getCodigo() {
         return codigo;
     }
@@ -34,5 +34,5 @@ public class Produto {
 
     public void setPreco(double preco) {
         this.preco = preco;
-    }    
+    }
 }

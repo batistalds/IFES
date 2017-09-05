@@ -1,7 +1,7 @@
-
 package cadastroestoque.Entidades;
 
 public class Funcionario {
+
     private long codigo;
     private String nome;
     private long cpf;
@@ -64,5 +64,5 @@ public class Funcionario {
 
     public void setEmail(String email) {
         this.email = email;
-    }    
+    }
 }

@@ -1,14 +1,14 @@
-
 package cadastroestoque.Entidades;
 
 public class ClientePessoaJuridica extends Cliente {
+
     private long cnpj;
     private long inscricaoEstadual;
     private String nomeFantasia;
     private String razaoSocial;
 
-    public ClientePessoaJuridica(long cnpj, long inscricaoEstadual, String nomeFantasia, String razaoSocial, 
-                                long codigo, String endereco, String telefone, String email) {
+    public ClientePessoaJuridica(long cnpj, long inscricaoEstadual, String nomeFantasia, String razaoSocial,
+            long codigo, String endereco, String telefone, String email) {
         super(codigo, endereco, telefone, email);
         this.cnpj = cnpj;
         this.inscricaoEstadual = inscricaoEstadual;
@@ -46,6 +46,6 @@ public class ClientePessoaJuridica extends Cliente {
 
     public void setRazaoSocial(String razaoSocial) {
         this.razaoSocial = razaoSocial;
-    }    
-    
+    }
+
 }
