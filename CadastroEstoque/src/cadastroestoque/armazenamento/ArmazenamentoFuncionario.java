@@ -31,27 +31,6 @@ public class ArmazenamentoFuncionario {
             novoFuncionario.setTelefone(f.getTelefone());
             novoFuncionario.setEmail(f.getEmail());
 
-            if (novoFuncionario instanceof Comprador) {
-                Comprador compradorAlterar = (Comprador) novoFuncionario;
-                Comprador compradorParametro = (Comprador) f;
-
-                compradorAlterar.setNome(compradorParametro.getNome());
-                compradorAlterar.setCpf(compradorParametro.getCpf());
-                compradorAlterar.setEndereco(compradorParametro.getEndereco());
-                compradorAlterar.setTelefone(compradorParametro.getTelefone());
-                compradorAlterar.setEmail(compradorParametro.getEmail());
-
-            } else if (novoFuncionario instanceof Vendedor) {
-                Vendedor vendedorAlterar = (Vendedor) novoFuncionario;
-                Vendedor vendedorParametro = (Vendedor) f;
-
-                vendedorAlterar.setNome(vendedorParametro.getNome());
-                vendedorAlterar.setCpf(vendedorParametro.getCpf());
-                vendedorAlterar.setEndereco(vendedorParametro.getEndereco());
-                vendedorAlterar.setTelefone(vendedorParametro.getTelefone());
-                vendedorAlterar.setEmail(vendedorParametro.getEmail());
-            }
-
             return true;
         }
 

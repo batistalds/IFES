@@ -270,11 +270,11 @@ public class CadastroCliente {
             if (opcaoCpf == 's') {
                 System.out.print("- Novo CPF: ");
                 cpf = input.nextLong();
+                input.nextLine(); // Consumindo quebra de linha
             }
 
             System.out.println("\n - SEXO: " + clientePf.getSexo());
             System.out.print("---> Deseja alterar o sexo? (s = sim / n = não): ");
-            input.nextLine(); // Consumindo quebra de linha
             opcaoSexo = input.nextLine().charAt(0);
             sexo = clientePf.getSexo();
             if (opcaoSexo == 's') {
@@ -311,23 +311,23 @@ public class CadastroCliente {
             if (opcaoCnpj == 's') {
                 System.out.print("- Novo CNPJ: ");
                 cnpj = input.nextLong();
+                input.nextLine(); // Consumindo quebra de linha
             }
 
             System.out.println("\n - Inscrição Estadual: " + clientePj.getInscricaoEstadual());
             System.out.print("---> Deseja alterar a inscrição estadual? (s = sim / n = não): ");
-            input.nextLine(); // Consumindo quebra de linha
             opcaoInscricaoEstadual = input.nextLine().charAt(0);
             inscricaoEstadual = clientePj.getInscricaoEstadual();
             if (opcaoInscricaoEstadual == 's') {
                 System.out.print("- Nova Inscrição Estadual: ");
                 inscricaoEstadual = input.nextLong();
+                input.nextLine(); // Consumindo quebra de linha
             }
 
         }
 
         System.out.println("\n - ENDEREÇO: " + clienteParaAlterar.getEndereco());
         System.out.print("---> Deseja alterar o endereço? (s = sim / n = não): ");
-        input.nextLine(); // Consumindo quebra de linha
         opcaoEndereco = input.nextLine().charAt(0);
         endereco = clienteParaAlterar.getEndereco();
         if (opcaoEndereco == 's') {
