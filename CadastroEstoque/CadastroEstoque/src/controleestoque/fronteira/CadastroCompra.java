@@ -182,15 +182,6 @@ public class CadastroCompra {
             } while (!dataValida);
         }
         
-        System.out.println("\n - VALOR TOTAL: " + compraParaAlterar.getValorTotal());
-        System.out.print("---> Deseja alterar o Valor Total? (s = sim / n = não): ");
-        char opcaoValorTotal = input.nextLine().charAt(0);
-        double valorTotal = compraParaAlterar.getValorTotal();
-        if (opcaoValorTotal == 's') {
-            System.out.print("- Novo Valor Total: ");
-            valorTotal = input.nextDouble();
-        }
-        
         System.out.println("\n - COMPRADOR: " + compraParaAlterar.getComprador().getNome());
         System.out.print("---> Deseja alterar o Comprador? (s = sim / n = não): ");
         input.nextLine(); // Consumindo quebra de linha
@@ -209,19 +200,27 @@ public class CadastroCompra {
             System.out.print("- Novo Fornecedor: ");
             fornec.setNomeFantasia(input.nextLine());
         }
-
-        System.out.println("\nDeseja realmente modificar os dados informados?");
-        System.out.println("- Código............: " + compraParaAlterar.getCodigo());
-        System.out.println("- Data..............: " + DateFormat.getDateInstance().format(data));
-        System.out.println("- Valor Total.......: " + compraParaAlterar.getValorTotal());
-        System.out.println("- Comprador.........: " + compraParaAlterar.getComprador().getNome());
-        System.out.println("- Fornecedor........: " + compraParaAlterar.getForncedor().getNomeFantasia());
-        System.out.print("---> (s = sim / n = não): ");
+        
+        Compra novaCompra = new Compra(codigo, data, comprador, fornec);
+        CadastroItemCompra cadastroItemCompra = new CadastroItemCompra(novaCompra);
+        cadastroItemCompra.exibirMenu();
+        
+        // Sempre que um novo item é inserido, o valor total é atualizado automaticamente
+        for (ItemCompra i : ArmazenamentoItemCompra.getLista()) {
+            novaCompra.inserirItemCompra(i);
+        }
+        
+        System.out.println("\nDeseja realmente inserir os dados informados?");
+        System.out.println("- Código.....: " + novaCompra.getCodigo());
+        System.out.println("- Data.......: " + data);
+        System.out.println("- Comprador..: " + comprador.getNome());
+        System.out.println("- Fornecedor.: " + fornec.getNomeFantasia());
+        System.out.println("- Valor Total: " + novaCompra.getValorTotal());
+        cadastroItemCompra.listar();
 
         char confirmacaoFinal = input.nextLine().charAt(0);
         if (confirmacaoFinal == 's') {
-            Compra compraAlterado = new Compra(codigo, data, comprador, fornec);
-            ArmazenamentoCompra.alterar(compraAlterado);
+            ArmazenamentoCompra.alterar(novaCompra);
         }
     }
     

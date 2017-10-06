@@ -1,7 +1,7 @@
 
 package cadastroestoque.Entidades;
 
-class ItemVenda {
+public class ItemVenda {
     private long codigo;
     private Venda venda;
     private Produto produto;
@@ -14,6 +14,10 @@ class ItemVenda {
         this.produto = produto;
         this.precoVenda = precoVenda;
         this.quantidade = quantidade;
+    }
+    
+    public ItemVenda(long codigo) {
+        this.codigo = codigo;
     }
 
     public long getCodigo() {

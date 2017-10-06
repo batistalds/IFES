@@ -12,10 +12,10 @@ public class Venda {
     private Cliente cliente;
     private ArrayList<ItemVenda> itensVenda;
 
-    public Venda(long codigo, Date data, double valorTotal, Vendedor vendedor, Cliente cliente) {
+    public Venda(long codigo, Date data, Vendedor vendedor, Cliente cliente) {
         this.codigo = codigo;
         this.data = data;
-        this.valorTotal = valorTotal;
+        this.valorTotal = 0;
         this.vendedor = vendedor;
         this.cliente = cliente;
     }
@@ -32,7 +32,7 @@ public class Venda {
         this.valorTotal = valor;
     }
 
-    public void inserirItemCompra(ItemVenda item) {
+    public void inserirItemVenda(ItemVenda item) {
         this.itensVenda.add(item);
         atualizarValorTotal();
     }

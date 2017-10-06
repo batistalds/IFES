@@ -13,6 +13,10 @@ public class Cliente {
         this.telefone = telefone;
         this.email = email;
     }
+    
+    public Cliente(long codigo) {
+        this.codigo = codigo;
+    }
 
     public long getCodigo() {
         return codigo;
