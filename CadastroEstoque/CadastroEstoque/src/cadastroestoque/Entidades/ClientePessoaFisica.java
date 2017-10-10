@@ -17,6 +17,10 @@ public class ClientePessoaFisica extends Cliente {
         this.nome = nome;
         this.sexo = sexo;
     }
+    
+    public ClientePessoaFisica(long codigo) {
+        super(codigo);
+    }
 
     public long getCpf() {
         return cpf;

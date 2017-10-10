@@ -100,7 +100,6 @@ public class CadastroCompra {
             }
         }
         
-        System.out.print("- Fornecedor: ");
         Fornecedor fornecedor = null;
         while (fornecedor == null) {
             System.out.print("- Fornecedor (Código): ");
@@ -172,6 +171,7 @@ public class CadastroCompra {
             do {
                 System.out.print("- Nova Data: ");
                 String dataTemp = input.nextLine();
+                input.nextLine(); // Consumindo quebra de linha
                 try {
                     data = DateFormat.getDateInstance().parse(dataTemp);
                     dataValida = true;
@@ -184,12 +184,12 @@ public class CadastroCompra {
         
         System.out.println("\n - COMPRADOR: " + compraParaAlterar.getComprador().getNome());
         System.out.print("---> Deseja alterar o Comprador? (s = sim / n = não): ");
-        input.nextLine(); // Consumindo quebra de linha
         char opcaoComprador = input.nextLine().charAt(0);
         Comprador comprador = compraParaAlterar.getComprador();
         if (opcaoComprador == 's') {
             System.out.print("- Novo Comprador: ");
             comprador.setNome(input.nextLine());
+            input.nextLine(); // Consumindo quebra de linha
         }
         
         System.out.println("\n - FORNECEDOR: " + compraParaAlterar.getForncedor().getNomeFantasia());
@@ -199,6 +199,7 @@ public class CadastroCompra {
         if (opcaoFornecedor == 's') {
             System.out.print("- Novo Fornecedor: ");
             fornec.setNomeFantasia(input.nextLine());
+            input.nextLine(); // Consumindo quebra de linha
         }
         
         Compra novaCompra = new Compra(codigo, data, comprador, fornec);

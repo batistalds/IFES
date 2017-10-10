@@ -15,6 +15,10 @@ public class ClientePessoaJuridica extends Cliente {
         this.nomeFantasia = nomeFantasia;
         this.razaoSocial = razaoSocial;
     }
+    
+    public ClientePessoaJuridica(long codigo) {
+        super(codigo);
+    }
 
     public long getCnpj() {
         return cnpj;

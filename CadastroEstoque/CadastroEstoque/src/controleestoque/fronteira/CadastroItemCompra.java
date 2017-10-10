@@ -73,7 +73,7 @@ public class CadastroItemCompra {
 
         Produto produto = null;
         do {
-            System.out.print("- Produto: ");
+            System.out.print("- Produto (Código): ");
             long codigoProduto = input.nextLong();
             input.nextLine(); // Consumindo quebra de linha
             produto = ArmazenamentoProduto.buscar(new Produto(codigoProduto));
@@ -141,7 +141,6 @@ public class CadastroItemCompra {
         
         System.out.println("\n - PREÇO COMPRA: " + itemCompraParaAlterar.getPrecoCompra());
         System.out.print("---> Deseja alterar o Preço de Compra? (s = sim / n = não): ");
-        input.nextLine(); // Consumindo quebra de linha
         char opcaoPrecoCompra = input.nextLine().charAt(0);
         double precoCompra = itemCompraParaAlterar.getPrecoCompra();
         if (opcaoPrecoCompra == 's') {
@@ -157,6 +156,7 @@ public class CadastroItemCompra {
         if (opcaoQuantidade == 's') {
             System.out.print("- Nova Quantidade: ");
             quantidade = input.nextInt();
+            input.nextLine(); // Consumindo quebra de linha
         }
 
         System.out.println("\nDeseja realmente modificar os dados informados?");

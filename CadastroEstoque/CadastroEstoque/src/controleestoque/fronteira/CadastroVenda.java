@@ -2,6 +2,8 @@
 package controleestoque.fronteira;
 
 import cadastroestoque.Entidades.Cliente;
+import cadastroestoque.Entidades.ClientePessoaFisica;
+import cadastroestoque.Entidades.ClientePessoaJuridica;
 import cadastroestoque.Entidades.Funcionario;
 import cadastroestoque.Entidades.ItemVenda;
 import cadastroestoque.Entidades.Venda;
@@ -99,13 +101,12 @@ public class CadastroVenda {
             }
         }
         
-        System.out.print("- Cliente: ");
         Cliente cliente = null;
         while (cliente == null) {
             System.out.print("- Cliente (Código): ");
             long codigoCliente = input.nextLong();
             input.nextLine(); // Consumindo quebra de linha
-            cliente = ArmazenamentoCliente.buscar(new Cliente(codigoCliente));
+            cliente = ArmazenamentoCliente.buscar(new Cliente(codigoCliente));            
             if (cliente == null) {
                 System.err.println("Código inválido para o Cliente digitado.");
             }
@@ -124,7 +125,14 @@ public class CadastroVenda {
         System.out.println("- Código.....: " + novaVenda.getCodigo());
         System.out.println("- Data.......: " + data);
         System.out.println("- Vendedor...: " + vendedor.getNome());
-        System.out.println("- Cliente....: " + cliente.getEmail());
+        ClientePessoaFisica cPf = null;
+        ClientePessoaJuridica cPj = null;
+        if (cliente instanceof ClientePessoaFisica) {
+            cPf = new ClientePessoaFisica(cliente.getCodigo());
+        } else if (cliente instanceof ClientePessoaJuridica) {
+            cPj = new ClientePessoaJuridica(cliente.getCodigo());
+        }
+        System.out.println("- Cliente....: " + cPf == null ? cPj.getNomeFantasia() : cPf.getNome());
         System.out.println("- Valor Total: " + novaVenda.getValorTotal());
         cadastroItemVenda.listar();
         System.out.print("---> (s = sim / n = não): ");
@@ -143,7 +151,7 @@ public class CadastroVenda {
             System.out.printf("| %6d | %23.2f | %19s | %19s |\n",
                         v.getCodigo(), v.getValorTotal(), v.getVendedor().getNome(), v.getCliente().getEmail());
         }
-        System.out.println("+--------+-------------------------+----------------------+----------------------+");
+        System.out.println("+--------+-------------------------+---------------------+---------------------+");
     }
     
     private void alterar() {

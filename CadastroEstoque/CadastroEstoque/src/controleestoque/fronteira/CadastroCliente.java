@@ -192,11 +192,11 @@ public class CadastroCliente {
         for (Cliente c : ArmazenamentoCliente.getLista()) {
             if (c instanceof ClientePessoaFisica) {
                 ClientePessoaFisica cPF = (ClientePessoaFisica) c;
-                System.out.printf("| %6d | %32s | %16s | %22s | %17s |\n",
+                System.out.printf("| %6d | %30s | %14s | %20s | %15s |\n",
                         cPF.getCodigo(), cPF.getNome(), "Física", formatarCpf(cPF.getCpf()), cPF.getTelefone());
             } else {
                 ClientePessoaJuridica cPJ = (ClientePessoaJuridica) c;
-                System.out.printf("| %6d | %32s | %16s | %22s | %17s |\n",
+                System.out.printf("| %6d | %30s | %14s | %20s | %15s |\n",
                         cPJ.getCodigo(), cPJ.getNomeFantasia(), "Jurídica", formatarCnpj(cPJ.getCnpj()), cPJ.getTelefone());
             }
         }

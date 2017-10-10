@@ -55,6 +55,8 @@ public class MenuPrincipal {
                 minhaCompra.exibirMenu();
                 break;
             case OPCAO_CADASTRO_VENDA:
+                CadastroVenda minhaVenda = new CadastroVenda();
+                minhaVenda.exibirMenu();
                 break;
             default:
                 if (opcao != OPCAO_TERMINAR_PROGRAMA) {

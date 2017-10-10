@@ -18,6 +18,7 @@ public class Venda {
         this.valorTotal = 0;
         this.vendedor = vendedor;
         this.cliente = cliente;
+        this.itensVenda = new ArrayList<>();
     }
 
     public Venda(long codigo) {
