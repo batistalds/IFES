@@ -1,10 +1,16 @@
 package controleestoque.fronteira;
 
 import cadastroestoque.Entidades.Produto;
-import cadastroestoque.armazenamento.ArmazenamentoProduto;
-import java.util.ArrayList;
+import cadastroestoque.armazenamento.DAOFactory;
+import cadastroestoque.armazenamento.ProdutoDAO;
 
 public class CadastroProduto extends Cadastro {
+    
+    private ProdutoDAO produtoDAO;
+    
+    public CadastroProduto() {
+        produtoDAO = DAOFactory.getDefaultDAOFactory().getProdutoDAO();
+    }
 
     @Override
     protected String obterTituloMenu() {
@@ -19,16 +25,14 @@ public class CadastroProduto extends Cadastro {
     @Override
     protected void inserir() {
         System.out.println("\nInserir novo registro de produto\n");
-        System.out.print("- Código: ");
-        long codigo = input.nextLong();
-        input.nextLine(); // Consumindo quebra de linha
+
         System.out.print("- Nome: ");
         String nome = input.nextLine();
         System.out.print("- Preço: ");
         double preco = input.nextDouble();
 
-        Produto novoProduto = new Produto(codigo, nome, preco);
-        ArmazenamentoProduto.getInstance().inserir(novoProduto);
+        Produto novoProduto = new Produto(nome, preco);
+        produtoDAO.inserir(novoProduto);
     }
 
     @Override
@@ -37,8 +41,7 @@ public class CadastroProduto extends Cadastro {
         System.out.println("+--------+----------------------------+----------+");
         System.out.println("| CÓDIGO |           NOME             | PREÇO    |");
         System.out.println("+--------+----------------------------+----------+");
-        ArrayList<Produto> lista = ArmazenamentoProduto.getInstance().getLista();
-        for (Produto p : lista) {
+        for (Produto p : produtoDAO.getLista()) {
             System.out.printf("| %6d | %-26s | %8.2f |\n", p.getCodigo(), p.getNome(), p.getPreco());
         }
         System.out.println("+--------+----------------------------+----------+");
@@ -50,8 +53,8 @@ public class CadastroProduto extends Cadastro {
         System.out.print("- Código: ");
         long codigo = input.nextLong();
 
-        Produto p = new Produto(codigo, "", 0);
-        Produto produtoParaAlterar = (Produto) ArmazenamentoProduto.getInstance().buscar(p);
+        Produto p = new Produto(codigo);
+        Produto produtoParaAlterar = produtoDAO.buscar(p);
 
         if (produtoParaAlterar != null) {
             System.out.println("\n - Nome: " + produtoParaAlterar.getNome());
@@ -83,7 +86,7 @@ public class CadastroProduto extends Cadastro {
             char confirmacaoFinal = input.nextLine().charAt(0);
             if (confirmacaoFinal == 's') {
                 Produto produtoAlterado = new Produto(codigo, nome, preco);
-                ArmazenamentoProduto.getInstance().alterar(produtoAlterado);
+                produtoDAO.alterar(produtoAlterado);
             }
 
         } else {
@@ -98,7 +101,7 @@ public class CadastroProduto extends Cadastro {
         System.out.print("- Código: ");
         long codigo = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
-        Produto produtoParaDeletar = (Produto) ArmazenamentoProduto.getInstance().buscar(new Produto(codigo));
+        Produto produtoParaDeletar = produtoDAO.buscar(new Produto(codigo));
 
         if (produtoParaDeletar == null) {
             System.err.println("Produto não encontrado. Código inexistente.");
@@ -112,7 +115,7 @@ public class CadastroProduto extends Cadastro {
         System.out.print("---> (s = sim / n = não): ");
         char confirmacaoFinal = input.nextLine().charAt(0);
         if (confirmacaoFinal == 's') {
-            ArmazenamentoProduto.getInstance().excluir(produtoParaDeletar);
+            produtoDAO.excluir(produtoParaDeletar);
         }
     }
 }
