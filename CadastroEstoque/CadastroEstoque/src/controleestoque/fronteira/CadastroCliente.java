@@ -1,6 +1,5 @@
 package controleestoque.fronteira;
 
-import java.util.Scanner;
 import cadastroestoque.Entidades.Cliente;
 import cadastroestoque.Entidades.ClientePessoaFisica;
 import cadastroestoque.Entidades.ClientePessoaJuridica;
@@ -9,58 +8,24 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CadastroCliente {
+public class CadastroCliente extends Cadastro {
 
-    private static final short OPCAO_INSERIR = 1;
-    private static final short OPCAO_LISTAR = 2;
-    private static final short OPCAO_ALTERAR = 3;
-    private static final short OPCAO_EXCLUIR = 4;
-    private static final short OPCAO_VOLTAR_MENU_PRINCIPAL = 5;
-
-    private Scanner input;
-
-    public void exibirMenu() {
-        input = new Scanner(System.in);
-        short opcao = 0;
-        while (opcao != OPCAO_VOLTAR_MENU_PRINCIPAL) {
-            System.out.println("\n\nOpções do Cadastro de Clientes:");
-            System.out.println("1 - Inserir");
-            System.out.println("2 - Listar");
-            System.out.println("3 - Alterar");
-            System.out.println("4 - Excluir");
-            System.out.println("5 - Voltar ao Menu Principal");
-            System.out.print("----> Escolha a sua opção: ");
-
-            opcao = input.nextShort();
-            ProcessarOpcaoUsuario(opcao);
-        }
+    @Override
+    protected String obterTituloMenu() {
+        return "Opções do Cadastro de Clientes:";
     }
 
-    private void ProcessarOpcaoUsuario(short opcao) {
-        switch (opcao) {
-            case OPCAO_INSERIR:
-                inserir();
-                break;
-            case OPCAO_LISTAR:
-                listar();
-                break;
-            case OPCAO_ALTERAR:
-                alterar();
-                break;
-            case OPCAO_EXCLUIR:
-                excluir();
-                break;
-            default:
-                if (opcao != OPCAO_VOLTAR_MENU_PRINCIPAL) {
-                    System.err.println("Opção inválida/inexistente.");
-                }
-        }
+    @Override
+    protected String obterMensagemSairDoMenu() {
+        return "Voltar ao Menu Principal";
     }
 
-    private void inserir() {
+    @Override
+    protected void inserir() {
         System.out.println("\nInserir novo registro de cliente\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
@@ -153,7 +118,7 @@ public class CadastroCliente {
         }
 
         if (novoCliente != null) {
-            ArmazenamentoCliente.inserir(novoCliente);
+            ArmazenamentoCliente.getInstance().inserir(novoCliente);
         }
     }
 
@@ -184,12 +149,14 @@ public class CadastroCliente {
         return cpfFormatado;
     }
 
-    private void listar() {
+    @Override
+    protected void listar() {
         System.out.println("\nListagem de clientes registrados\n");
         System.out.println("+--------+--------------------------------+----------------+----------------------+-----------------+");
         System.out.println("| CÓDIGO |       NOME/NOME FANTASIA       | TIPO DE PESSOA |      CPF/CNPJ        |    TELEFONE     |");
         System.out.println("+--------+--------------------------------+----------------+----------------------+-----------------+");
-        for (Cliente c : ArmazenamentoCliente.getLista()) {
+        ArrayList<Cliente> lista = ArmazenamentoCliente.getInstance().getLista();
+        for (Cliente c : lista) {
             if (c instanceof ClientePessoaFisica) {
                 ClientePessoaFisica cPF = (ClientePessoaFisica) c;
                 System.out.printf("| %6d | %30s | %14s | %20s | %15s |\n",
@@ -203,13 +170,13 @@ public class CadastroCliente {
         System.out.println("+--------+--------------------------------+----------------+----------------------+-----------------+");
     }
 
-    private void alterar() {
+    @Override
+    protected void alterar() {
         System.out.println("\nAlterar o registro do cliente de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
-
-        Cliente c = new Cliente(codigo, "", "", "");
-        Cliente clienteParaAlterar = ArmazenamentoCliente.buscar(c);
+        
+        Cliente clienteParaAlterar = (Cliente) ArmazenamentoCliente.getInstance().buscar(new Cliente(codigo));
 
         // Cliente Pessoa Física
         char opcaoNome, opcaoDataNasc, opcaoSexo, opcaoCpf;
@@ -380,16 +347,18 @@ public class CadastroCliente {
             } else {
                 clienteAlterado = new ClientePessoaJuridica(cnpj, inscricaoEstadual, nomeFantasia, razaoSocial, codigo, endereco, telefone, email);
             }
-            ArmazenamentoCliente.alterar(clienteAlterado);
+            ArmazenamentoCliente.getInstance().alterar(clienteAlterado);
         }
     }
 
-    private void excluir() {
+    @Override
+    protected void excluir() {
         System.out.println("\nExcluir o registro do cliente de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
-        Cliente clienteParaDeletar = ArmazenamentoCliente.buscar(new Cliente(codigo, "", "", ""));
+
+        Cliente clienteParaDeletar = (Cliente) ArmazenamentoCliente.getInstance().buscar(new Cliente(codigo));
 
         if (clienteParaDeletar == null) {
             System.err.println("Cliente não encontrado. Código inexistente.");
@@ -420,7 +389,7 @@ public class CadastroCliente {
 
         char confirmacaoFinal = input.nextLine().charAt(0);
         if (confirmacaoFinal == 's') {
-            ArmazenamentoCliente.excluir(clienteParaDeletar);
+            ArmazenamentoCliente.getInstance().excluir(clienteParaDeletar);
         }
     }
 }

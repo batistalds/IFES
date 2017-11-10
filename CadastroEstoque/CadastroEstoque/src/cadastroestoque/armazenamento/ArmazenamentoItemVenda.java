@@ -1,30 +1,23 @@
 
 package cadastroestoque.armazenamento;
+import cadastroestoque.Entidades.Entidade;
 import cadastroestoque.Entidades.ItemVenda;
 
-import java.util.ArrayList;
-
-public class ArmazenamentoItemVenda {
-    private static ArrayList<ItemVenda> LISTA_ITEM_VENDA;
-
-    public static ArrayList<ItemVenda> getLista() {
-        return LISTA_ITEM_VENDA;
+public class ArmazenamentoItemVenda extends Armazenamento {
+    
+    private static ArmazenamentoItemCompra INSTANCE;
+    
+    public static ArmazenamentoItemCompra getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ArmazenamentoItemCompra();
+        }
+        return INSTANCE;
     }
     
-    public static void iniciarLista() {
-        if (LISTA_ITEM_VENDA == null) {
-            LISTA_ITEM_VENDA = new ArrayList<>();    
-        } else {
-            LISTA_ITEM_VENDA.clear();
-        }        
-    }
-    
-    public static void inserir(ItemVenda iv) {
-        LISTA_ITEM_VENDA.add(iv);
-    }
-    
-    public static boolean alterar(ItemVenda iv) {
-        ItemVenda itemVendaAlterar = buscar(iv);
+    @Override    
+    public boolean alterar(Entidade e) {
+        ItemVenda iv = (ItemVenda) e;
+        ItemVenda itemVendaAlterar = (ItemVenda) buscar(iv);
         
         if (itemVendaAlterar != null) {
             itemVendaAlterar.setVenda(iv.getVenda());
@@ -35,26 +28,5 @@ public class ArmazenamentoItemVenda {
         }
         
         return false;
-    }
-    
-    public static boolean excluir(ItemVenda iv) {
-        ItemVenda itemVendaExcluir = buscar(iv);
-        
-        if (itemVendaExcluir != null) {
-            LISTA_ITEM_VENDA.remove(itemVendaExcluir);
-            return true;
-        }
-        
-        return false;
-    }
-    
-    public static ItemVenda buscar(ItemVenda iv) {
-        for (ItemVenda item : LISTA_ITEM_VENDA) {
-            if (item.getCodigo() == iv.getCodigo()) {
-                return item;
-            }
-        }
-        
-        return null;
     }
 }

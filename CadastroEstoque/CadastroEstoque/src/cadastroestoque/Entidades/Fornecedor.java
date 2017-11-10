@@ -1,6 +1,6 @@
 package cadastroestoque.Entidades;
 
-public class Fornecedor {
+public class Fornecedor implements Entidade {
 
     private long codigo;
     private String nomeFantasia;
@@ -31,6 +31,7 @@ public class Fornecedor {
         this.nomeFantasia = nomeFantasia;
     }
 
+    @Override
     public long getCodigo() {
         return codigo;
     }

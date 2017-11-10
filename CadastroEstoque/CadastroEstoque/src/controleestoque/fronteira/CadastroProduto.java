@@ -2,57 +2,22 @@ package controleestoque.fronteira;
 
 import cadastroestoque.Entidades.Produto;
 import cadastroestoque.armazenamento.ArmazenamentoProduto;
-import java.util.Scanner;
+import java.util.ArrayList;
 
-public class CadastroProduto {
+public class CadastroProduto extends Cadastro {
 
-    private static final short OPCAO_INSERIR = 1;
-    private static final short OPCAO_LISTAR = 2;
-    private static final short OPCAO_ALTERAR = 3;
-    private static final short OPCAO_EXCLUIR = 4;
-    private static final short OPCAO_VOLTAR_MENU_PRINCIPAL = 5;
-
-    private Scanner input;
-
-    public void exibirMenu() {
-        input = new Scanner(System.in);
-        short opcao = 0;
-        while (opcao != OPCAO_VOLTAR_MENU_PRINCIPAL) {
-            System.out.println("\n\nOpções do Cadastro de Produto:");
-            System.out.println("1 - Inserir");
-            System.out.println("2 - Listar");
-            System.out.println("3 - Alterar");
-            System.out.println("4 - Excluir");
-            System.out.println("5 - Voltar ao Menu Principal");
-            System.out.print("----> Escolha a sua opção: ");
-
-            opcao = input.nextShort();
-            ProcessarOpcaoUsuario(opcao);
-        }
+    @Override
+    protected String obterTituloMenu() {
+        return "Opções do Cadastro de Produto:";
     }
 
-    private void ProcessarOpcaoUsuario(short opcao) {
-        switch (opcao) {
-            case OPCAO_INSERIR:
-                inserir();
-                break;
-            case OPCAO_LISTAR:
-                listar();
-                break;
-            case OPCAO_ALTERAR:
-                alterar();
-                break;
-            case OPCAO_EXCLUIR:
-                excluir();
-                break;
-            default:
-                if (opcao != OPCAO_VOLTAR_MENU_PRINCIPAL) {
-                    System.err.println("Opção inválida/inexistente.");
-                }
-        }
+    @Override
+    protected String obterMensagemSairDoMenu() {
+        return "Voltar ao Menu Principal";
     }
 
-    private void inserir() {
+    @Override
+    protected void inserir() {
         System.out.println("\nInserir novo registro de produto\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
@@ -63,27 +28,30 @@ public class CadastroProduto {
         double preco = input.nextDouble();
 
         Produto novoProduto = new Produto(codigo, nome, preco);
-        ArmazenamentoProduto.inserir(novoProduto);
+        ArmazenamentoProduto.getInstance().inserir(novoProduto);
     }
 
-    private void listar() {
+    @Override
+    protected void listar() {
         System.out.println("\nListagem de produtos registrados\n");
         System.out.println("+--------+----------------------------+----------+");
         System.out.println("| CÓDIGO |           NOME             | PREÇO    |");
         System.out.println("+--------+----------------------------+----------+");
-        for (Produto p : ArmazenamentoProduto.getLista()) {
+        ArrayList<Produto> lista = ArmazenamentoProduto.getInstance().getLista();
+        for (Produto p : lista) {
             System.out.printf("| %6d | %-26s | %8.2f |\n", p.getCodigo(), p.getNome(), p.getPreco());
         }
         System.out.println("+--------+----------------------------+----------+");
     }
 
-    private void alterar() {
+    @Override
+    protected void alterar() {
         System.out.println("\nAlterar o registro do produto de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
 
         Produto p = new Produto(codigo, "", 0);
-        Produto produtoParaAlterar = ArmazenamentoProduto.buscar(p);
+        Produto produtoParaAlterar = (Produto) ArmazenamentoProduto.getInstance().buscar(p);
 
         if (produtoParaAlterar != null) {
             System.out.println("\n - Nome: " + produtoParaAlterar.getNome());
@@ -115,7 +83,7 @@ public class CadastroProduto {
             char confirmacaoFinal = input.nextLine().charAt(0);
             if (confirmacaoFinal == 's') {
                 Produto produtoAlterado = new Produto(codigo, nome, preco);
-                ArmazenamentoProduto.alterar(produtoAlterado);
+                ArmazenamentoProduto.getInstance().alterar(produtoAlterado);
             }
 
         } else {
@@ -124,12 +92,13 @@ public class CadastroProduto {
         }
     }
 
-    private void excluir() {
+    @Override
+    protected void excluir() {
         System.out.println("\nExcluir o registro do produto de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
-        Produto produtoParaDeletar = ArmazenamentoProduto.buscar(new Produto(codigo, "", 0));
+        Produto produtoParaDeletar = (Produto) ArmazenamentoProduto.getInstance().buscar(new Produto(codigo));
 
         if (produtoParaDeletar == null) {
             System.err.println("Produto não encontrado. Código inexistente.");
@@ -143,7 +112,7 @@ public class CadastroProduto {
         System.out.print("---> (s = sim / n = não): ");
         char confirmacaoFinal = input.nextLine().charAt(0);
         if (confirmacaoFinal == 's') {
-            ArmazenamentoProduto.excluir(produtoParaDeletar);
+            ArmazenamentoProduto.getInstance().excluir(produtoParaDeletar);
         }
     }
 }

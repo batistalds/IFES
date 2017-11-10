@@ -4,57 +4,22 @@ import cadastroestoque.Entidades.Fornecedor;
 import cadastroestoque.armazenamento.ArmazenamentoFornecedor;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Scanner;
+import java.util.ArrayList;
 
-public class CadastroFornecedor {
+public class CadastroFornecedor extends Cadastro {
 
-    private static final short OPCAO_INSERIR = 1;
-    private static final short OPCAO_LISTAR = 2;
-    private static final short OPCAO_ALTERAR = 3;
-    private static final short OPCAO_EXCLUIR = 4;
-    private static final short OPCAO_VOLTAR_MENU_PRINCIPAL = 5;
-
-    private Scanner input;
-
-    public void exibirMenu() {
-        input = new Scanner(System.in);
-        short opcao = 0;
-        while (opcao != OPCAO_VOLTAR_MENU_PRINCIPAL) {
-            System.out.println("\n\nOpções do Cadastro de Fornecedor:");
-            System.out.println("1 - Inserir");
-            System.out.println("2 - Listar");
-            System.out.println("3 - Alterar");
-            System.out.println("4 - Excluir");
-            System.out.println("5 - Voltar ao Menu Principal");
-            System.out.print("----> Escolha a sua opção: ");
-
-            opcao = input.nextShort();
-            ProcessarOpcaoUsuario(opcao);
-        }
+    @Override
+    protected String obterTituloMenu() {
+        return "Opções do Cadastro de Fornecedor:";
     }
 
-    private void ProcessarOpcaoUsuario(short opcao) {
-        switch (opcao) {
-            case OPCAO_INSERIR:
-                inserir();
-                break;
-            case OPCAO_LISTAR:
-                listar();
-                break;
-            case OPCAO_ALTERAR:
-                alterar();
-                break;
-            case OPCAO_EXCLUIR:
-                excluir();
-                break;
-            default:
-                if (opcao != OPCAO_VOLTAR_MENU_PRINCIPAL) {
-                    System.err.println("Opção inválida/inexistente.");
-                }
-        }
+    @Override
+    protected String obterMensagemSairDoMenu() {
+        return "Voltar ao Menu Principal";
     }
 
-    private void inserir() {
+    @Override
+    protected void inserir() {
         System.out.println("\nInserir novo registro de fornecedor\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
@@ -77,15 +42,17 @@ public class CadastroFornecedor {
         String email = input.nextLine();
 
         Fornecedor novoFornecedor = new Fornecedor(codigo, nomeFantasia, razaoSocial, endereco, cnpj, inscricaoEstadual, telefone, email);
-        ArmazenamentoFornecedor.inserir(novoFornecedor);
+        ArmazenamentoFornecedor.getInstance().inserir(novoFornecedor);
     }
 
-    private void listar() {
+    @Override
+    protected void listar() {
         System.out.println("\nListagem de fornecedores registrados\n");
         System.out.println("+--------+----------------------------+-----------------------------+-------------------------+---------------------+---------------------------+---------------+---------------------+");
         System.out.println("| CÓDIGO |       NOME FANTASIA        |         RAZÃO SOCIAL        |         ENDEREÇO        |         CNPJ        |     INSCRIÇÃO ESTADUAL    |    TELEFONE   |        E-MAIL       |");
         System.out.println("+--------+----------------------------+-----------------------------+-------------------------+---------------------+---------------------------+---------------+---------------------+");
-        for (Fornecedor f : ArmazenamentoFornecedor.getLista()) {
+        ArrayList<Fornecedor> lista = ArmazenamentoFornecedor.getInstance().getLista();
+        for (Fornecedor f : lista) {
             System.out.printf("| %6d | %26s | %27s | %23s | %17s | %25d | %13s | %19s |\n",
                     f.getCodigo(), f.getNomeFantasia(), f.getRazaoSocial(), f.getEndereco(), formatarCnpj(f.getCnpj()), f.getInscricaoEstadual(), f.getTelefone(), f.getEmail());
         }
@@ -106,13 +73,13 @@ public class CadastroFornecedor {
         return cnpjFormatado;
     }
 
-    private void alterar() {
+    @Override
+    protected void alterar() {
         System.out.println("\nAlterar o registro do fornecedor de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
-
-        Fornecedor f = new Fornecedor(codigo);
-        Fornecedor fornecedorParaAlterar = ArmazenamentoFornecedor.buscar(f);
+        
+        Fornecedor fornecedorParaAlterar = (Fornecedor) ArmazenamentoFornecedor.getInstance().buscar(new Fornecedor(codigo));
 
         if (fornecedorParaAlterar != null) {
             System.out.println("\n - NOME FANTASIA: " + fornecedorParaAlterar.getNomeFantasia());
@@ -194,7 +161,7 @@ public class CadastroFornecedor {
             char confirmacaoFinal = input.nextLine().charAt(0);
             if (confirmacaoFinal == 's') {
                 Fornecedor fornecedorAlterado = new Fornecedor(codigo, nomeFantasia, razaoSocial, endereco, cnpj, inscricaoEstadual, telefone, email);
-                ArmazenamentoFornecedor.alterar(fornecedorAlterado);
+                ArmazenamentoFornecedor.getInstance().alterar(fornecedorAlterado);
             }
 
         } else {
@@ -203,12 +170,13 @@ public class CadastroFornecedor {
         }
     }
 
-    private void excluir() {
+    @Override
+    protected void excluir() {
         System.out.println("\nExcluir o registro do fornecedor de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
-        Fornecedor fornecedorParaDeletar = ArmazenamentoFornecedor.buscar(new Fornecedor(codigo));
+        Fornecedor fornecedorParaDeletar = (Fornecedor) ArmazenamentoFornecedor.getInstance().buscar(new Fornecedor(codigo));
 
         if (fornecedorParaDeletar == null) {
             System.err.println("Fornecedor não encontrado. Código inexistente.");
@@ -227,7 +195,7 @@ public class CadastroFornecedor {
         System.out.print("---> (s = sim / n = não): ");
         char confirmacaoFinal = input.nextLine().charAt(0);
         if (confirmacaoFinal == 's') {
-            ArmazenamentoFornecedor.excluir(fornecedorParaDeletar);
+            ArmazenamentoFornecedor.getInstance().excluir(fornecedorParaDeletar);
         }
     }
 }

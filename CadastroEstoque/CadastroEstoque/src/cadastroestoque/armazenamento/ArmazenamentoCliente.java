@@ -3,26 +3,23 @@ package cadastroestoque.armazenamento;
 import cadastroestoque.Entidades.Cliente;
 import cadastroestoque.Entidades.ClientePessoaFisica;
 import cadastroestoque.Entidades.ClientePessoaJuridica;
-import java.util.ArrayList;
+import cadastroestoque.Entidades.Entidade;
 
-public class ArmazenamentoCliente {
+public class ArmazenamentoCliente extends Armazenamento {
 
-    private static ArrayList<Cliente> LISTA_CLIENTE;
-
-    public static ArrayList<Cliente> getLista() {
-        return LISTA_CLIENTE;
+    private static ArmazenamentoCliente INSTANCE;
+    
+    public static ArmazenamentoCliente getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ArmazenamentoCliente();
+        }
+        return INSTANCE;
     }
-
-    public static void iniciarLista() {
-        LISTA_CLIENTE = new ArrayList<>();
-    }
-
-    public static void inserir(Cliente c) {
-        LISTA_CLIENTE.add(c);
-    }
-
-    public static boolean alterar(Cliente c) {
-        Cliente novoCliente = buscar(c);
+    
+    @Override
+    public boolean alterar(Entidade e) {
+        Cliente c = (Cliente) e;
+        Cliente novoCliente = (Cliente) buscar(c);
 
         if (novoCliente != null) {
             novoCliente.setEmail(c.getEmail());
@@ -51,27 +48,5 @@ public class ArmazenamentoCliente {
         }
 
         return false;
-    }
-
-    public static boolean excluir(Cliente f) {
-        Cliente clienteParaExcluir = buscar(f);
-
-        if (clienteParaExcluir != null) {
-            LISTA_CLIENTE.remove(clienteParaExcluir);
-            return true;
-        }
-
-        return false;
-    }
-
-    public static Cliente buscar(Cliente f) {
-        Cliente clienteProcurado = null;
-        for (Cliente cli : LISTA_CLIENTE) {
-            if (cli.getCodigo() == f.getCodigo()) {
-                clienteProcurado = cli;
-                break;
-            }
-        }
-        return clienteProcurado;
     }
 }

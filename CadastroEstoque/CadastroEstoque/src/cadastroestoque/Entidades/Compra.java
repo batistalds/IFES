@@ -3,7 +3,7 @@ package cadastroestoque.Entidades;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Compra {
+public class Compra implements Entidade {
 
     private long codigo;
     private Date data;
@@ -55,6 +55,7 @@ public class Compra {
         return false;
     }
 
+    @Override
     public long getCodigo() {
         return codigo;
     }

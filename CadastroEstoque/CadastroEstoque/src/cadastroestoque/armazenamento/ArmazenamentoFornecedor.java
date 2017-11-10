@@ -1,60 +1,36 @@
 package cadastroestoque.armazenamento;
 
+import cadastroestoque.Entidades.Entidade;
 import cadastroestoque.Entidades.Fornecedor;
-import java.util.ArrayList;
 
-public class ArmazenamentoFornecedor {
+public class ArmazenamentoFornecedor extends Armazenamento {
 
-    private static ArrayList<Fornecedor> LISTA_FORNECEDOR;
-
-    public static ArrayList<Fornecedor> getLista() {
-        return LISTA_FORNECEDOR;
+    private static ArmazenamentoFornecedor INSTANCE;
+    
+    public static ArmazenamentoFornecedor getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ArmazenamentoFornecedor();
+        }
+        return INSTANCE;
     }
 
-    public static void iniciarLista() {
-        LISTA_FORNECEDOR = new ArrayList<>();
-    }
+    @Override
+    public boolean alterar(Entidade e) {
+        Fornecedor f = (Fornecedor) e;
+        Fornecedor fornecedorAlterar = (Fornecedor) buscar(f);        
 
-    public static void inserir(Fornecedor f) {
-        LISTA_FORNECEDOR.add(f);
-    }
-
-    public static boolean alterar(Fornecedor f) {
-        Fornecedor novoFornecedor = buscar(f);
-
-        if (novoFornecedor != null) {
-            novoFornecedor.setCnpj(f.getCnpj());
-            novoFornecedor.setEmail(f.getEmail());
-            novoFornecedor.setEndereco(f.getEndereco());
-            novoFornecedor.setInscricaoEstadual(f.getInscricaoEstadual());
-            novoFornecedor.setNomeFantasia(f.getNomeFantasia());
-            novoFornecedor.setRazaoSocial(f.getRazaoSocial());
-            novoFornecedor.setTelefone(f.getTelefone());
+        if (fornecedorAlterar != null) {
+            fornecedorAlterar.setCnpj(f.getCnpj());
+            fornecedorAlterar.setEmail(f.getEmail());
+            fornecedorAlterar.setEndereco(f.getEndereco());
+            fornecedorAlterar.setInscricaoEstadual(f.getInscricaoEstadual());
+            fornecedorAlterar.setNomeFantasia(f.getNomeFantasia());
+            fornecedorAlterar.setRazaoSocial(f.getRazaoSocial());
+            fornecedorAlterar.setTelefone(f.getTelefone());
             return true;
         }
 
         return false;
     }
 
-    public static boolean excluir(Fornecedor f) {
-        Fornecedor fornecedorParaExcluir = buscar(f);
-
-        if (fornecedorParaExcluir != null) {
-            LISTA_FORNECEDOR.remove(fornecedorParaExcluir);
-            return true;
-        }
-
-        return false;
-    }
-
-    public static Fornecedor buscar(Fornecedor f) {
-        Fornecedor fornecedorProcurado = null;
-        for (Fornecedor forn : LISTA_FORNECEDOR) {
-            if (forn.getCodigo() == f.getCodigo()) {
-                fornecedorProcurado = forn;
-                break;
-            }
-        }
-        return fornecedorProcurado;
-    }
 }

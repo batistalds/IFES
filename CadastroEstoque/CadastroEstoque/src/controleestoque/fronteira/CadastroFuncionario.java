@@ -6,57 +6,22 @@ import cadastroestoque.Entidades.Vendedor;
 import cadastroestoque.armazenamento.ArmazenamentoFuncionario;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Scanner;
+import java.util.ArrayList;
 
-public class CadastroFuncionario {
+public class CadastroFuncionario extends Cadastro {
 
-    private static final short OPCAO_INSERIR = 1;
-    private static final short OPCAO_LISTAR = 2;
-    private static final short OPCAO_ALTERAR = 3;
-    private static final short OPCAO_EXCLUIR = 4;
-    private static final short OPCAO_VOLTAR_MENU_PRINCIPAL = 5;
-
-    private Scanner input;
-
-    public void exibirMenu() {
-        input = new Scanner(System.in);
-        short opcao = 0;
-        while (opcao != OPCAO_VOLTAR_MENU_PRINCIPAL) {
-            System.out.println("\n\nOpções do Cadastro de Funcionário:");
-            System.out.println("1 - Inserir");
-            System.out.println("2 - Listar");
-            System.out.println("3 - Alterar");
-            System.out.println("4 - Excluir");
-            System.out.println("5 - Voltar ao Menu Principal");
-            System.out.print("----> Escolha a sua opção: ");
-
-            opcao = input.nextShort();
-            ProcessarOpcaoUsuario(opcao);
-        }
+    @Override
+    protected String obterTituloMenu() {
+        return "Opções do Cadastro de Funcionário:";
     }
 
-    private void ProcessarOpcaoUsuario(short opcao) {
-        switch (opcao) {
-            case OPCAO_INSERIR:
-                inserir();
-                break;
-            case OPCAO_LISTAR:
-                listar();
-                break;
-            case OPCAO_ALTERAR:
-                alterar();
-                break;
-            case OPCAO_EXCLUIR:
-                excluir();
-                break;
-            default:
-                if (opcao != OPCAO_VOLTAR_MENU_PRINCIPAL) {
-                    System.err.println("Opção inválida/inexistente.");
-                }
-        }
+    @Override
+    protected String obterMensagemSairDoMenu() {
+        return "Voltar ao Menu Principal";
     }
 
-    private void inserir() {
+    @Override
+    protected void inserir() {
         System.out.println("\nInserir novo registro de funcionário\n");
 
         System.out.print("- Código: ");
@@ -102,7 +67,7 @@ public class CadastroFuncionario {
             }
         } while (!codigoConfirmaValido);
 
-        ArmazenamentoFuncionario.inserir(novoFuncionario);
+        ArmazenamentoFuncionario.getInstance().inserir(novoFuncionario);
     }
 
     private static String formatarCpf(long cpf) {
@@ -118,25 +83,28 @@ public class CadastroFuncionario {
         return cpfFormatado;
     }
 
-    private void listar() {
+    @Override
+    protected void listar() {
         System.out.println("\nListagem de funcionários registrados\n");
         System.out.println("+--------+--------------------------+--------------------+-------------------------+---------------+---------------------+-----------+");
         System.out.println("| CÓDIGO |          NOME            |        CPF         |         ENDEREÇO        |    TELEFONE   |        E-MAIL       |    TIPO   |");
         System.out.println("+--------+--------------------------+--------------------+-------------------------+---------------+---------------------+-----------+");
-        for (Funcionario f : ArmazenamentoFuncionario.getLista()) {
+        ArrayList<Funcionario> lista = ArmazenamentoFuncionario.getInstance().getLista();
+        for (Funcionario f : lista) {
             System.out.printf("| %6d | %24s | %18s | %23s | %13s | %19s | %7s |\n",
                     f.getCodigo(), f.getNome(), formatarCpf(f.getCpf()), f.getEndereco(), f.getTelefone(), f.getEmail(), (f instanceof Vendedor ? "Vendedor " : "Comprador"));
         }
         System.out.println("+--------+--------------------------+--------------------+-------------------------+---------------+---------------------+-----------+");
     }
 
-    private void alterar() {
+    @Override
+    protected void alterar() {
         System.out.println("\nAlterar o registro do funcionário de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
 
-        Funcionario f = new Funcionario(codigo, "", 0, "", "", "");
-        Funcionario funcionarioParaAlterar = ArmazenamentoFuncionario.buscar(f);
+        Funcionario f = new Funcionario(codigo);
+        Funcionario funcionarioParaAlterar = (Funcionario) ArmazenamentoFuncionario.getInstance().buscar(f);
 
         if (funcionarioParaAlterar != null) {
             System.out.println("\n - NOME: " + funcionarioParaAlterar.getNome());
@@ -204,7 +172,7 @@ public class CadastroFuncionario {
                     funcionarioAlterado = new Comprador(codigo, nome, cpf, endereco, telefone, email);
                 }
 
-                ArmazenamentoFuncionario.alterar(funcionarioAlterado);
+                ArmazenamentoFuncionario.getInstance().alterar(funcionarioAlterado);
             }
 
         } else {
@@ -213,12 +181,13 @@ public class CadastroFuncionario {
         }
     }
 
-    private void excluir() {
+    @Override
+    protected void excluir() {
         System.out.println("\nExcluir o registro do funcionário de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
-        Funcionario funcionarioParaDeletar = ArmazenamentoFuncionario.buscar(new Funcionario(codigo, "", 0, "", "", ""));
+        Funcionario funcionarioParaDeletar = (Funcionario) ArmazenamentoFuncionario.getInstance().buscar(new Funcionario(codigo));
 
         if (funcionarioParaDeletar == null) {
             System.err.println("Funcionário não encontrado. Código inexistente.");
@@ -235,7 +204,7 @@ public class CadastroFuncionario {
         System.out.print("---> (s = sim / n = não): ");
         char confirmacaoFinal = input.nextLine().charAt(0);
         if (confirmacaoFinal == 's') {
-            ArmazenamentoFuncionario.excluir(funcionarioParaDeletar);
+            ArmazenamentoFuncionario.getInstance().excluir(funcionarioParaDeletar);
         }
     }
 }

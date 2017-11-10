@@ -4,7 +4,7 @@ package cadastroestoque.Entidades;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Venda {
+public class Venda implements Entidade {
     private long codigo;
     private Date data;
     private double valorTotal;
@@ -55,6 +55,7 @@ public class Venda {
         return false;
     }
 
+    @Override
     public long getCodigo() {
         return codigo;
     }

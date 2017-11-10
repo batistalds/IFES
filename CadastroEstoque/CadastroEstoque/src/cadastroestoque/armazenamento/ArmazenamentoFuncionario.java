@@ -1,28 +1,23 @@
 package cadastroestoque.armazenamento;
 
+import cadastroestoque.Entidades.Entidade;
 import cadastroestoque.Entidades.Funcionario;
-import cadastroestoque.Entidades.Comprador;
-import cadastroestoque.Entidades.Vendedor;
-import java.util.ArrayList;
 
-public class ArmazenamentoFuncionario {
+public class ArmazenamentoFuncionario extends Armazenamento {
 
-    private static ArrayList<Funcionario> LISTA_FUNCIONARIO;
-
-    public static ArrayList<Funcionario> getLista() {
-        return LISTA_FUNCIONARIO;
+    private static ArmazenamentoFuncionario INSTANCE;
+    
+    public static ArmazenamentoFuncionario getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ArmazenamentoFuncionario();
+        }
+        return INSTANCE;
     }
 
-    public static void iniciarLista() {
-        LISTA_FUNCIONARIO = new ArrayList<>();
-    }
-
-    public static void inserir(Funcionario f) {
-        LISTA_FUNCIONARIO.add(f);
-    }
-
-    public static boolean alterar(Funcionario f) {
-        Funcionario novoFuncionario = buscar(f);
+    @Override
+    public boolean alterar(Entidade e) {
+        Funcionario f = (Funcionario) e;
+        Funcionario novoFuncionario = (Funcionario) buscar(f);
 
         if (novoFuncionario != null) {
             novoFuncionario.setNome(f.getNome());
@@ -35,27 +30,5 @@ public class ArmazenamentoFuncionario {
         }
 
         return false;
-    }
-
-    public static boolean excluir(Funcionario f) {
-        Funcionario funcionarioParaExcluir = buscar(f);
-
-        if (funcionarioParaExcluir != null) {
-            LISTA_FUNCIONARIO.remove(funcionarioParaExcluir);
-            return true;
-        }
-
-        return false;
-    }
-
-    public static Funcionario buscar(Funcionario f) {
-        Funcionario funcionarioProcurado = null;
-        for (Funcionario forn : LISTA_FUNCIONARIO) {
-            if (forn.getCodigo() == f.getCodigo()) {
-                funcionarioProcurado = forn;
-                break;
-            }
-        }
-        return funcionarioProcurado;
     }
 }

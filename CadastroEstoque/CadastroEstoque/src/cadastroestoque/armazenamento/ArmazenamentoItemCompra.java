@@ -1,31 +1,24 @@
 
 package cadastroestoque.armazenamento;
 
+import cadastroestoque.Entidades.Entidade;
 import cadastroestoque.Entidades.ItemCompra;
-import java.util.ArrayList;
 
-public class ArmazenamentoItemCompra {
+public class ArmazenamentoItemCompra extends Armazenamento {
     
-    private static ArrayList<ItemCompra> LISTA_ITEM_COMPRA;
-
-    public static ArrayList<ItemCompra> getLista() {
-        return LISTA_ITEM_COMPRA;
+    private static ArmazenamentoItemCompra INSTANCE;
+    
+    public static ArmazenamentoItemCompra getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ArmazenamentoItemCompra();
+        }
+        return INSTANCE;
     }
     
-    public static void iniciarLista() {
-        if (LISTA_ITEM_COMPRA == null) {
-            LISTA_ITEM_COMPRA = new ArrayList<>();    
-        } else {
-            LISTA_ITEM_COMPRA.clear();
-        }        
-    }
-    
-    public static void inserir(ItemCompra ic) {
-        LISTA_ITEM_COMPRA.add(ic);
-    }
-    
-    public static boolean alterar(ItemCompra ic) {
-        ItemCompra itemCompraAlterar = buscar(ic);
+    @Override
+    public boolean alterar(Entidade e) {
+        ItemCompra ic = (ItemCompra) e;
+        ItemCompra itemCompraAlterar = (ItemCompra) buscar(ic);
         
         if (itemCompraAlterar != null) {
             itemCompraAlterar.setCompra(ic.getCompra());
@@ -36,26 +29,5 @@ public class ArmazenamentoItemCompra {
         }
         
         return false;
-    }
-    
-    public static boolean excluir(ItemCompra ic) {
-        ItemCompra itemCompraExcluir = buscar(ic);
-        
-        if (itemCompraExcluir != null) {
-            LISTA_ITEM_COMPRA.remove(itemCompraExcluir);
-            return true;
-        }
-        
-        return false;
-    }
-    
-    public static ItemCompra buscar(ItemCompra ic) {
-        for (ItemCompra item : LISTA_ITEM_COMPRA) {
-            if (item.getCodigo() == ic.getCodigo()) {
-                return item;
-            }
-        }
-        
-        return null;
     }
 }

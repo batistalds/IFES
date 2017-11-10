@@ -6,65 +6,30 @@ import cadastroestoque.Entidades.ItemCompra;
 import cadastroestoque.Entidades.Produto;
 import cadastroestoque.armazenamento.ArmazenamentoItemCompra;
 import cadastroestoque.armazenamento.ArmazenamentoProduto;
-import java.util.Scanner;
+import java.util.ArrayList;
 
-public class CadastroItemCompra {
-    
-    private static final short OPCAO_INSERIR = 1;
-    private static final short OPCAO_LISTAR = 2;
-    private static final short OPCAO_ALTERAR = 3;
-    private static final short OPCAO_EXCLUIR = 4;
-    private static final short OPCAO_CONCLUIR_CADASTRO = 5;
-
-    private Scanner input;
+public class CadastroItemCompra extends Cadastro {
     
     private Compra compraReferencia;
 
     public CadastroItemCompra(Compra c) {
-        ArmazenamentoItemCompra.iniciarLista();
-        ArmazenamentoItemCompra.getLista().addAll(c.getItensCompra());
+        ArmazenamentoItemCompra.getInstance().iniciarLista();
+        ArmazenamentoItemCompra.getInstance().getLista().addAll(c.getItensCompra());
         compraReferencia = c;
     }
-    
-    public void exibirMenu() {
-        input = new Scanner(System.in);
-        short opcao = 0;
-        while (opcao != OPCAO_CONCLUIR_CADASTRO) {
-            System.out.println("\n\nOpções do Cadastro de Itens da Compras:");
-            System.out.println("1 - Inserir");
-            System.out.println("2 - Listar");
-            System.out.println("3 - Alterar");
-            System.out.println("4 - Excluir");
-            System.out.println("5 - Concluir o cadastro dos itens da compra");
-            System.out.print("----> Escolha a sua opção: ");
 
-            opcao = input.nextShort();
-            ProcessarOpcaoUsuario(opcao);
-        }
+    @Override
+    protected String obterTituloMenu() {
+        return "Opções do Cadastro de Item Compra:";
     }
 
-    private void ProcessarOpcaoUsuario(short opcao) {
-        switch (opcao) {
-            case OPCAO_INSERIR:
-                inserir();
-                break;
-            case OPCAO_LISTAR:
-                listar();
-                break;
-            case OPCAO_ALTERAR:
-                alterar();
-                break;
-            case OPCAO_EXCLUIR:
-                excluir();
-                break;
-            default:
-                if (opcao != OPCAO_CONCLUIR_CADASTRO) {
-                    System.err.println("Opção inválida/inexistente.");
-                }
-        }
+    @Override
+    protected String obterMensagemSairDoMenu() {
+        return "Voltar ao Menu Anterior";
     }
-    
-    private void inserir() {
+
+    @Override
+    protected void inserir() {
         System.out.println("\nInserir novo registro de item de compra\n");
         
         System.out.print("- Código: ");
@@ -76,7 +41,7 @@ public class CadastroItemCompra {
             System.out.print("- Produto (Código): ");
             long codigoProduto = input.nextLong();
             input.nextLine(); // Consumindo quebra de linha
-            produto = ArmazenamentoProduto.buscar(new Produto(codigoProduto));
+            produto = (Produto) ArmazenamentoProduto.getInstance().buscar(new Produto(codigoProduto));
             if (produto == null) {
                 System.err.println("Produto inválido/inexistente.");
             }
@@ -91,28 +56,31 @@ public class CadastroItemCompra {
         input.nextLine(); // Consumindo quebra de linha
         
         ItemCompra novoItemCompra = new ItemCompra(codigo, compraReferencia, produto, precoCompra, quantidade);
-        ArmazenamentoItemCompra.inserir(novoItemCompra);
+        ArmazenamentoItemCompra.getInstance().inserir(novoItemCompra);
     }
 
+    @Override
     protected void listar() {
         System.out.println("\nListagem de itens de compra registrados\n");
         System.out.println("+--------+-----------------------------+----------------+------------+");
         System.out.println("| CÓDIGO |           PRODUTO           |     PREÇO      | QUANTIDADE |");
         System.out.println("+--------+-----------------------------+----------------+------------+");
-        for (ItemCompra ic : ArmazenamentoItemCompra.getLista()) {
+        ArrayList<ItemCompra> lista = ArmazenamentoItemCompra.getInstance().getLista();
+        for (ItemCompra ic : lista) {
             System.out.printf("| %6d | %-27s | %14.2f | %10d |\n",
                         ic.getCodigo(), ic.getProduto().getNome(), ic.getPrecoCompra(), ic.getQuantidade());
         }
         System.out.println("+--------+-----------------------------+----------------+------------+");
     }
 
-    private void alterar() {
+    @Override
+    protected void alterar() {
         System.out.println("\nAlterar o registro de Item de Compra de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
 
         ItemCompra ic = new ItemCompra(codigo);
-        ItemCompra itemCompraParaAlterar = ArmazenamentoItemCompra.buscar(ic);
+        ItemCompra itemCompraParaAlterar = (ItemCompra) ArmazenamentoItemCompra.getInstance().buscar(ic);
         
         if (itemCompraParaAlterar == null) {
             System.err.println("Item de Compra inexistente/inválido.");
@@ -130,7 +98,7 @@ public class CadastroItemCompra {
                 System.out.print("- Novo Produto (Código): ");
                 long codigoProduto = input.nextLong();
                 input.nextLine(); // Consumindo quebra de linha
-                pp = ArmazenamentoProduto.buscar(new Produto(codigoProduto));
+                pp = (Produto) ArmazenamentoProduto.getInstance().buscar(new Produto(codigoProduto));
                 if (pp == null) {
                     System.err.println("Produto inválido/inexistente.");
                 } else {
@@ -169,16 +137,17 @@ public class CadastroItemCompra {
         char confirmacaoFinal = input.nextLine().charAt(0);
         if (confirmacaoFinal == 's') {
             ItemCompra itemCompraAlterado = new ItemCompra(codigo, compraReferencia, produto, precoCompra, quantidade);
-            ArmazenamentoItemCompra.alterar(itemCompraAlterado);
+            ArmazenamentoItemCompra.getInstance().alterar(itemCompraAlterado);
         }
     }
 
-    private void excluir() {
+    @Override
+    protected void excluir() {
         System.out.println("\nExcluir o registro do Item de Compra de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
-        ItemCompra itemCompraParaDeletar = ArmazenamentoItemCompra.buscar(new ItemCompra(codigo));
+        ItemCompra itemCompraParaDeletar = (ItemCompra) ArmazenamentoItemCompra.getInstance().buscar(new ItemCompra(codigo));
         
         if (itemCompraParaDeletar == null) {
             System.err.println("Item Compra não encontrado. Código inexistente.");
@@ -194,7 +163,7 @@ public class CadastroItemCompra {
 
         char confirmacaoFinal = input.nextLine().charAt(0);
         if (confirmacaoFinal == 's') {
-            ArmazenamentoItemCompra.excluir(itemCompraParaDeletar);
+            ArmazenamentoItemCompra.getInstance().excluir(itemCompraParaDeletar);
         }
     }
     

@@ -1,6 +1,6 @@
 package cadastroestoque.Entidades;
 
-public class Cliente {
+public class Cliente implements Entidade {
 
     private long codigo;
     private String endereco;
@@ -18,6 +18,7 @@ public class Cliente {
         this.codigo = codigo;
     }
 
+    @Override
     public long getCodigo() {
         return codigo;
     }

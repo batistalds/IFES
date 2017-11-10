@@ -12,12 +12,12 @@ public class CadastroEstoque {
 
     public static void main(String[] args) {
         // Inicialização de dados
-        ArmazenamentoProduto.iniciarLista();
-        ArmazenamentoFornecedor.iniciarLista();
-        ArmazenamentoCliente.iniciarLista();
-        ArmazenamentoFuncionario.iniciarLista();
-        ArmazenamentoCompra.iniciarLista();
-        ArmazenamentoVenda.iniciarLista();
+        ArmazenamentoProduto.getInstance().iniciarLista();
+        ArmazenamentoFornecedor.getInstance().iniciarLista();
+        ArmazenamentoCliente.getInstance().iniciarLista();
+        ArmazenamentoFuncionario.getInstance().iniciarLista();
+        ArmazenamentoCompra.getInstance().iniciarLista();
+        ArmazenamentoVenda.getInstance().iniciarLista();
 
         MenuPrincipal meuMenu = new MenuPrincipal();
         meuMenu.exibirMenu();

@@ -2,27 +2,25 @@
 package cadastroestoque.armazenamento;
 
 import cadastroestoque.Entidades.Compra;
+import cadastroestoque.Entidades.Entidade;
 import cadastroestoque.Entidades.ItemCompra;
 import java.util.ArrayList;
 
-public class ArmazenamentoCompra {
+public class ArmazenamentoCompra extends Armazenamento {
     
-    private static ArrayList<Compra> LISTA_COMPRA;
-
-    public static ArrayList<Compra> getLista() {
-        return LISTA_COMPRA;
+    private static ArmazenamentoCompra INSTANCE;
+    
+    public static ArmazenamentoCompra getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ArmazenamentoCompra();
+        }
+        return INSTANCE;
     }
     
-    public static void iniciarLista() {
-        LISTA_COMPRA = new ArrayList<>();
-    }
-    
-    public static void inserir(Compra c) {
-        LISTA_COMPRA.add(c);
-    }
-    
-    public static boolean alterar(Compra c) {
-        Compra compraAlterar = buscar(c);
+    @Override
+    public boolean alterar(Entidade e) {
+        Compra c = (Compra) e;
+        Compra compraAlterar = (Compra) buscar(c);
         
         if (compraAlterar != null) {
             compraAlterar.setComprador(c.getComprador());
@@ -36,27 +34,6 @@ public class ArmazenamentoCompra {
         }
         
         return false;
-    }
-    
-    public static boolean excluir(Compra c) {
-        Compra compraExcluir = buscar(c);
-        
-        if (compraExcluir != null) {
-            LISTA_COMPRA.remove(compraExcluir);
-            return true;
-        }
-        
-        return false;
-    }
-    
-    public static Compra buscar(Compra c) {
-        for (Compra item : LISTA_COMPRA) {
-            if (item.getCodigo() == c.getCodigo()) {
-                return item;
-            }
-        }
-        
-        return null;
     }
     
 }

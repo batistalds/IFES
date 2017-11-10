@@ -3,13 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/20162in001/Downloads/CadastroEstoque/CadastroEstoque/src/cadastroestoque/Entidades/Compra.java</file>
-            <file>file:/C:/Users/20162in001/Downloads/CadastroEstoque/CadastroEstoque/src/cadastroestoque/Entidades/Funcionario.java</file>
-            <file>file:/C:/Users/20162in001/Downloads/CadastroEstoque/CadastroEstoque/src/cadastroestoque/armazenamento/ArmazenamentoItemCompra.java</file>
-            <file>file:/C:/Users/20162in001/Downloads/CadastroEstoque/CadastroEstoque/src/controleestoque/fronteira/CadastroCompra.java</file>
-            <file>file:/C:/Users/20162in001/Downloads/CadastroEstoque/CadastroEstoque/src/cadastroestoque/Entidades/ItemCompra.java</file>
-            <file>file:/C:/Users/20162in001/Downloads/CadastroEstoque/CadastroEstoque/src/controleestoque/fronteira/CadastroItemCompra.java</file>
-            <file>file:/C:/Users/20162in001/Downloads/CadastroEstoque/CadastroEstoque/src/cadastroestoque/CadastroEstoque.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/CadastroEstoque/CadastroEstoque/src/cadastroestoque/CadastroEstoque.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/CadastroEstoque/CadastroEstoque/src/controleestoque/fronteira/CadastroVenda.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/CadastroEstoque/CadastroEstoque/src/cadastroestoque/armazenamento/ArmazenamentoItemVenda.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/CadastroEstoque/CadastroEstoque/src/controleestoque/fronteira/CadastroItemVenda.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/CadastroEstoque/CadastroEstoque/src/controleestoque/fronteira/CadastroProduto.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/CadastroEstoque/CadastroEstoque/src/cadastroestoque/armazenamento/ArmazenamentoProduto.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/CadastroEstoque/CadastroEstoque/src/cadastroestoque/armazenamento/ArmazenamentoVenda.java</file>
         </group>
     </open-files>
 </project-private>

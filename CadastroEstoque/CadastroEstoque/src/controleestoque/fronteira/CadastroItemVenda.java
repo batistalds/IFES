@@ -6,65 +6,30 @@ import cadastroestoque.Entidades.Produto;
 import cadastroestoque.Entidades.Venda;
 import cadastroestoque.armazenamento.ArmazenamentoItemVenda;
 import cadastroestoque.armazenamento.ArmazenamentoProduto;
-import java.util.Scanner;
+import java.util.ArrayList;
 
-public class CadastroItemVenda {
-        
-    private static final short OPCAO_INSERIR = 1;
-    private static final short OPCAO_LISTAR = 2;
-    private static final short OPCAO_ALTERAR = 3;
-    private static final short OPCAO_EXCLUIR = 4;
-    private static final short OPCAO_CONCLUIR_CADASTRO = 5;
-
-    private Scanner input;
+public class CadastroItemVenda extends Cadastro {
     
     private Venda vendaReferencia;
 
     public CadastroItemVenda(Venda v) {
-        ArmazenamentoItemVenda.iniciarLista();
-        ArmazenamentoItemVenda.getLista().addAll(v.getItensVenda());
+        ArmazenamentoItemVenda.getInstance().iniciarLista();
+        ArmazenamentoItemVenda.getInstance().getLista().addAll(v.getItensVenda());
         vendaReferencia = v;
     }
     
-    public void exibirMenu() {
-        input = new Scanner(System.in);
-        short opcao = 0;
-        while (opcao != OPCAO_CONCLUIR_CADASTRO) {
-            System.out.println("\n\nOpções do Cadastro de Itens de Venda:");
-            System.out.println("1 - Inserir");
-            System.out.println("2 - Listar");
-            System.out.println("3 - Alterar");
-            System.out.println("4 - Excluir");
-            System.out.println("5 - Concluir o cadastro dos itens da venda");
-            System.out.print("----> Escolha a sua opção: ");
-
-            opcao = input.nextShort();
-            ProcessarOpcaoUsuario(opcao);
-        }
+    @Override
+    protected String obterTituloMenu() {
+        return "Opções do Cadastro de Item Venda:";
     }
 
-    private void ProcessarOpcaoUsuario(short opcao) {
-        switch (opcao) {
-            case OPCAO_INSERIR:
-                inserir();
-                break;
-            case OPCAO_LISTAR:
-                listar();
-                break;
-            case OPCAO_ALTERAR:
-                alterar();
-                break;
-            case OPCAO_EXCLUIR:
-                excluir();
-                break;
-            default:
-                if (opcao != OPCAO_CONCLUIR_CADASTRO) {
-                    System.err.println("Opção inválida/inexistente.");
-                }
-        }
+    @Override
+    protected String obterMensagemSairDoMenu() {
+        return "Voltar ao Menu Anterior";
     }
-    
-    private void inserir() {
+
+    @Override    
+    protected void inserir() {
         System.out.println("\nInserir novo registro de item de venda de\n");
         
         System.out.print("- Código: ");
@@ -76,7 +41,7 @@ public class CadastroItemVenda {
             System.out.print("- Produto: ");
             long codigoProduto = input.nextLong();
             input.nextLine(); // Consumindo quebra de linha
-            produto = ArmazenamentoProduto.buscar(new Produto(codigoProduto));
+            produto = (Produto) ArmazenamentoProduto.getInstance().buscar(new Produto(codigoProduto));
             if (produto == null) {
                 System.err.println("Produto inválido/inexistente.");
             }
@@ -91,28 +56,31 @@ public class CadastroItemVenda {
         input.nextLine(); // Consumindo quebra de linha
         
         ItemVenda novoItemVenda = new ItemVenda(codigo, vendaReferencia, produto, precoVenda, quantidade);
-        ArmazenamentoItemVenda.inserir(novoItemVenda);
+        ArmazenamentoItemVenda.getInstance().inserir(novoItemVenda);
     }
 
+    @Override
     protected void listar() {
         System.out.println("\nListagem de itens de venda registrados\n");
         System.out.println("+--------+-----------------------------+----------------+------------+");
         System.out.println("| CÓDIGO |           PRODUTO           |     PREÇO      | QUANTIDADE |");
         System.out.println("+--------+-----------------------------+----------------+------------+");
-        for (ItemVenda iv : ArmazenamentoItemVenda.getLista()) {
+        ArrayList<ItemVenda> lista = ArmazenamentoItemVenda.getInstance().getLista();
+        for (ItemVenda iv : lista) {
             System.out.printf("| %6d | %-27s | %14.2f | %10d |\n",
                         iv.getCodigo(), iv.getProduto().getNome(), iv.getPrecoVenda(), iv.getQuantidade());
         }
         System.out.println("+--------+-----------------------------+----------------+------------+");
     }
 
-    private void alterar() {
+    @Override
+    protected void alterar() {
         System.out.println("\nAlterar o registro de Item de Venda de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
 
         ItemVenda iv = new ItemVenda(codigo);
-        ItemVenda itemVendaParaAlterar = ArmazenamentoItemVenda.buscar(iv);
+        ItemVenda itemVendaParaAlterar = (ItemVenda) ArmazenamentoItemVenda.getInstance().buscar(iv);
         
         if (itemVendaParaAlterar == null) {
             System.err.println("Item de Venda inexistente/inválido.");
@@ -130,7 +98,7 @@ public class CadastroItemVenda {
                 System.out.print("- Novo Produto (Código): ");
                 long codigoProduto = input.nextLong();
                 input.nextLine(); // Consumindo quebra de linha
-                pp = ArmazenamentoProduto.buscar(new Produto(codigoProduto));
+                pp = (Produto) ArmazenamentoProduto.getInstance().buscar(new Produto(codigoProduto));
                 if (pp == null) {
                     System.err.println("Produto inválido/inexistente.");
                 } else {
@@ -169,16 +137,17 @@ public class CadastroItemVenda {
         char confirmacaoFinal = input.nextLine().charAt(0);
         if (confirmacaoFinal == 's') {
             ItemVenda itemVendaAlterado = new ItemVenda(codigo, vendaReferencia, produto, precoVenda, quantidade);
-            ArmazenamentoItemVenda.alterar(itemVendaAlterado);
+            ArmazenamentoItemVenda.getInstance().alterar(itemVendaAlterado);
         }
     }
 
-    private void excluir() {
+    @Override
+    protected void excluir() {
         System.out.println("\nExcluir o registro do Item de Venda de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
-        ItemVenda itemVendaParaDeletar = ArmazenamentoItemVenda.buscar(new ItemVenda(codigo));
+        ItemVenda itemVendaParaDeletar = (ItemVenda) ArmazenamentoItemVenda.getInstance().buscar(new ItemVenda(codigo));
         
         if (itemVendaParaDeletar == null) {
             System.err.println("Item Venda não encontrado. Código inexistente.");
@@ -194,7 +163,7 @@ public class CadastroItemVenda {
 
         char confirmacaoFinal = input.nextLine().charAt(0);
         if (confirmacaoFinal == 's') {
-            ArmazenamentoItemVenda.excluir(itemVendaParaDeletar);
+            ArmazenamentoItemVenda.getInstance().excluir(itemVendaParaDeletar);
         }
     }
 }
