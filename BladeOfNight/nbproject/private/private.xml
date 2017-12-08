@@ -3,14 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/entidades/Jogador.java</file>
             <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/armazenamento/DAOFactory.java</file>
-            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/armazenamento/pg/PgProjetilDAO.java</file>
-            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/armazenamento/pg/PgRankingDAO.java</file>
             <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/fronteira/MenuPrincipal.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/fronteira/CadastroNave.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/entidades/Boss.java</file>
             <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/armazenamento/pg/PostgreSqlDAOFactory.java</file>
-            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/BladeOfNight.java</file>
-            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/armazenamento/pg/PgBackgroundDAO.java</file>
-            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/entidades/Ranking.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/armazenamento/pg/PgInimigoDAO.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/armazenamento/pg/PgJogadorDAO.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/armazenamento/pg/PgBossDAO.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/armazenamento/pg/PgNaveDAO.java</file>
+            <file>file:/C:/Users/cristiano.modesto/Desktop/BladeOfNight/src/bladeofnight/entidades/Inimigo.java</file>
         </group>
     </open-files>
 </project-private>
