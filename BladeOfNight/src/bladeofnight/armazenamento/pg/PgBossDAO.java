@@ -23,8 +23,10 @@ public class PgBossDAO implements BossDAO {
     
     private static final String SCRIPT_EXCLUIR = "DELETE FROM Boss WHERE codigo = ?";
     
-    private static final String SCRIPT_GETLISTA = "SELECT codigo, fase, inimigo " +
+    private static final String SCRIPT_GETLISTA = "SELECT * " +
                                                   "FROM Boss ";
+    
+    private static final String SCRIPT_BUSCARCODIGO_NAVE = "SELECT * FROM Boss WHERE inimigo = ?";
     
     @Override
     public Boss buscar(Boss boss) {
@@ -39,9 +41,8 @@ public class PgBossDAO implements BossDAO {
                 long codigoBoss = rs.getLong(1);
                 int fase = rs.getInt(2);
                 long inimigo = rs.getLong(3);
-                Inimigo oInimigo = new Inimigo(inimigo, boss.getCodigo());
-                //long codigoInimigo, String nomeInimigo, char tipoInimigo, long codigoNave
-                Boss bossEncontrado = new Boss(codigoBoss, fase, oInimigo.getCodigo(), oInimigo.getNomeInimigo(), oInimigo.getTipoInimigo(), boss.getCodigo());
+                
+                Boss bossEncontrado = new Boss(0, inimigo, codigoBoss, fase);
                 return bossEncontrado;
             }
         } catch (SQLException ex) {
@@ -50,6 +51,26 @@ public class PgBossDAO implements BossDAO {
         
         return null;
     }
+    
+    @Override
+    public long buscarCodigoComInimigo(long codInimigo) {
+        try {
+            Connection con = PostgreSqlDAOFactory.getConnection();
+            PreparedStatement ps = con.prepareStatement(SCRIPT_BUSCARCODIGO_NAVE);
+            ps.setLong(1, codInimigo);
+            // Adquirindo resultado da Query após sua execução
+            ResultSet rs = ps.executeQuery();
+            // Pulamos para a primeira Linha resultada da Query, se houver alguma coisa, quer dizer que retornamos alguma coisa (não vazio)
+            if (rs.next()) {
+                long codigoBoss = rs.getLong(1);
+                return codigoBoss;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao obter o código de um registro de boss", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return -1;
+    }
 
     @Override
     public boolean inserir(Boss boss) {
@@ -57,7 +78,7 @@ public class PgBossDAO implements BossDAO {
             Connection con = PostgreSqlDAOFactory.getConnection();
             PreparedStatement ps = con.prepareStatement(SCRIPT_INSERIR);
             ps.setInt(1, boss.getFase());
-            ps.setLong(2, boss.getCodigo());
+            ps.setLong(2, boss.getInimigoId());
             
             int resultadoDeLinhasAfetadas = ps.executeUpdate();
             return resultadoDeLinhasAfetadas == 1; // Como acrescenta-se uma linha à tabela, o resultado esperado para sucesso da execução é 1
@@ -74,7 +95,7 @@ public class PgBossDAO implements BossDAO {
             Connection con = PostgreSqlDAOFactory.getConnection();
             PreparedStatement ps = con.prepareStatement(SCRIPT_ALTERAR);
             ps.setInt(1, boss.getFase());
-            ps.setLong(2, boss.getCodigo());
+            ps.setLong(2, boss.getInimigoId());
             ps.setLong(3, boss.getCodigo());
             
             int resultadoDeLinhasAfetadas = ps.executeUpdate();
@@ -117,11 +138,11 @@ public class PgBossDAO implements BossDAO {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                long codigo = rs.getLong(1);
+                long codigoBoss = rs.getLong(1);
                 int fase = rs.getInt(2);
                 long inimigo = rs.getLong(3);
                 
-                Boss boss = new Boss(codigo, fase, inimigo, "", ' ', codigo);
+                Boss boss = new Boss(0, inimigo, codigoBoss, fase);
                 listaBosses.add(boss);
             }
         } catch (SQLException ex) {

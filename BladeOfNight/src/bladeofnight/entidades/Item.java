@@ -14,6 +14,12 @@ public class Item extends Imagem implements Entidade {
         this.efeito = efeito;
         this.velY = velY;
     }
+    
+    public Item(String nome, String efeito, int velY) {
+        super.nome = nome;
+        this.efeito = efeito;
+        this.velY = velY;
+    }
 
     public Item(long codigoItem) {
         this.codigoItem = codigoItem;

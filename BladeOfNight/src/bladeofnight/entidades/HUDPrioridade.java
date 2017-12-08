@@ -14,6 +14,10 @@ public class HUDPrioridade {
     public HUDPrioridade(long codigoHUDPrioridades) {
         this.codigoHUDPrioridades = codigoHUDPrioridades;
     }
+    
+    public HUDPrioridade(int valorPrioridade) {
+        this.valorPrioridade = valorPrioridade;
+    }
 
     public long getCodigo() {
         return codigoHUDPrioridades;

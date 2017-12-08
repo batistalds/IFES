@@ -4,11 +4,11 @@ package bladeofnight.entidades;
 public class HUD extends Imagem implements Entidade {
 
     private long codigoHUD;
-    private int prioridadeImgs;
-    private int listaTextos;
-    private int listaNumeros;
+    private long prioridadeImgs;
+    private long listaTextos;
+    private long listaNumeros;
 
-    public HUD(long codigoHUD, int prioridadeImgs, int listaTextos, int listaNumeros) {
+    public HUD(long codigoHUD, long prioridadeImgs, long listaTextos, long listaNumeros) {
         this.codigoHUD = codigoHUD;
         this.prioridadeImgs = prioridadeImgs;
         this.listaTextos = listaTextos;
@@ -18,21 +18,27 @@ public class HUD extends Imagem implements Entidade {
     public HUD(long codigoHUD) {
         this.codigoHUD = codigoHUD;
     }
+
+    public HUD(long prioridadeImgs, long listaTextos, long listaNumeros) {
+        this.prioridadeImgs = prioridadeImgs;
+        this.listaTextos = listaTextos;
+        this.listaNumeros = listaNumeros;
+    }
     
     @Override
     public long getCodigo() {
         return codigoHUD;
     }
 
-    public int getPrioridadeImgs() {
+    public long getPrioridadeImgs() {
         return prioridadeImgs;
     }
 
-    public int getListaTextos() {
+    public long getListaTextos() {
         return listaTextos;
     }
 
-    public int getListaNumeros() {
+    public long getListaNumeros() {
         return listaNumeros;
     }
 
@@ -40,15 +46,15 @@ public class HUD extends Imagem implements Entidade {
         this.codigoHUD = codigoHUD;
     }
 
-    public void setPrioridadeImgs(int prioridadeImgs) {
+    public void setPrioridadeImgs(long prioridadeImgs) {
         this.prioridadeImgs = prioridadeImgs;
     }
 
-    public void setListaTextos(int listaTextos) {
+    public void setListaTextos(long listaTextos) {
         this.listaTextos = listaTextos;
     }
 
-    public void setListaNumeros(int listaNumeros) {
+    public void setListaNumeros(long listaNumeros) {
         this.listaNumeros = listaNumeros;
     }
     

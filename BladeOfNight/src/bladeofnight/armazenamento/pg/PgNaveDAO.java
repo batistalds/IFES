@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 public class PgNaveDAO implements NaveDAO {
     
-    private static final String SCRIPT_BUSCAR = "SELECT codigo, cor, tipo, velocidade, poder" +
+    private static final String SCRIPT_BUSCAR = "SELECT *" +
                                                 "FROM Nave " +
                                                 "WHERE codigo = ?";
     
@@ -22,8 +22,10 @@ public class PgNaveDAO implements NaveDAO {
     
     private static final String SCRIPT_EXCLUIR = "DELETE FROM Nave WHERE codigo = ?";
     
-    private static final String SCRIPT_GETLISTA = "SELECT codigo, cor, tipo, velocidade, poder" +
+    private static final String SCRIPT_GETLISTA = "SELECT *" +
                                                   "FROM Nave ";
+    
+    private static final String SCRIPT_BUSCARCODIGO = "SELECT * FROM Nave WHERE cor = ? AND tipo = ? AND velocidade = ? AND poder = ?";
     
     @Override
     public Nave buscar(Nave nave) {
@@ -49,6 +51,29 @@ public class PgNaveDAO implements NaveDAO {
         }
         
         return null;
+    }
+    
+    @Override
+    public long buscarCodigo(Nave nave) {
+        try {
+            Connection con = PostgreSqlDAOFactory.getConnection();
+            PreparedStatement ps = con.prepareStatement(SCRIPT_BUSCARCODIGO);
+            ps.setString(1, nave.getCor());
+            ps.setString(2, Character.toString(nave.getTipo()));
+            ps.setInt(3, nave.getVelocidade());
+            ps.setInt(4, nave.getPoder());
+            // Adquirindo resultado da Query após sua execução
+            ResultSet rs = ps.executeQuery();
+            // Pulamos para a primeira Linha resultada da Query, se houver alguma coisa, quer dizer que retornamos alguma coisa (não vazio)
+            if (rs.next()) {
+                long codigoNave = rs.getLong(1);
+                return codigoNave;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao obter o código de um registro de nave", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return -1;
     }
 
     @Override
@@ -96,7 +121,7 @@ public class PgNaveDAO implements NaveDAO {
             Connection con = PostgreSqlDAOFactory.getConnection();
             PreparedStatement ps = con.prepareStatement(SCRIPT_EXCLUIR);
             ps.setLong(1, nave.getCodigo());
-            
+            System.out.println(ps);
             int resultadoDeLinhasAfetadas = ps.executeUpdate();
             return resultadoDeLinhasAfetadas == 1;
         } catch (SQLException ex) {

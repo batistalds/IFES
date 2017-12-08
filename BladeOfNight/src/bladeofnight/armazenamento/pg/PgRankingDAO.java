@@ -1,12 +1,7 @@
 
 package bladeofnight.armazenamento.pg;
 
-import bladeofnight.armazenamento.BackgroundDAO;
-import bladeofnight.armazenamento.DAOFactory;
-import bladeofnight.armazenamento.HudDAO;
 import bladeofnight.armazenamento.RankingDAO;
-import bladeofnight.entidades.Background;
-import bladeofnight.entidades.HUD;
 import bladeofnight.entidades.Ranking;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,14 +41,8 @@ public class PgRankingDAO implements RankingDAO {
                 int dezPrimeirasDatas = rs.getInt(4);
                 int imagemFundo = rs.getInt(5);
                 int interfaceHud = rs.getInt(6);
-
-                BackgroundDAO backDao = DAOFactory.getDefaultDAOFactory().getBackgroundDAO();                
-                Background aImagemFundo = backDao.buscar(new Background(imagemFundo));
                 
-                HudDAO hDao = DAOFactory.getDefaultDAOFactory().getHudDAO();
-                HUD aHud = hDao.buscar(new HUD(interfaceHud));
-                
-                Ranking rankingEncontrado = new Ranking(codigoRanking, dezPrimeirosPlayers, dezPrimeirosScores, dezPrimeirasDatas, aImagemFundo, aHud);
+                Ranking rankingEncontrado = new Ranking(codigoRanking, dezPrimeirosPlayers, dezPrimeirosScores, dezPrimeirasDatas, imagemFundo, interfaceHud);
                 return rankingEncontrado;
             }
         } catch (SQLException ex) {
@@ -71,8 +60,8 @@ public class PgRankingDAO implements RankingDAO {
             ps.setInt(1, ranking.getDezPrimeirosPlayers());
             ps.setInt(2, ranking.getDezPrimeirosScores());
             ps.setInt(3, ranking.getDezPrimeirasDatas());
-            ps.setLong(4, ranking.getImagemFundo().getCodigo());
-            ps.setLong(5, ranking.getInterfaceHud().getCodigo());
+            ps.setInt(4, ranking.getImagemFundo());
+            ps.setInt(5, ranking.getInterfaceHud());
             
             int resultadoDeLinhasAfetadas = ps.executeUpdate();
             return resultadoDeLinhasAfetadas == 1; // Como acrescenta-se uma linha à tabela, o resultado esperado para sucesso da execução é 1
@@ -91,8 +80,8 @@ public class PgRankingDAO implements RankingDAO {
             ps.setInt(1, ranking.getDezPrimeirosPlayers());
             ps.setInt(2, ranking.getDezPrimeirosScores());
             ps.setInt(3, ranking.getDezPrimeirasDatas());
-            ps.setLong(4, ranking.getImagemFundo().getCodigo());
-            ps.setLong(5, ranking.getInterfaceHud().getCodigo());
+            ps.setInt(4, ranking.getImagemFundo());
+            ps.setInt(5, ranking.getInterfaceHud());
             ps.setLong(6, ranking.getCodigo());
             
             int resultadoDeLinhasAfetadas = ps.executeUpdate();
@@ -142,13 +131,7 @@ public class PgRankingDAO implements RankingDAO {
                 int imagemFundo = rs.getInt(5);
                 int interfaceHud = rs.getInt(6);
                 
-                BackgroundDAO backDao = DAOFactory.getDefaultDAOFactory().getBackgroundDAO();                
-                Background aImagemFundo = backDao.buscar(new Background(imagemFundo));
-                
-                HudDAO hDao = DAOFactory.getDefaultDAOFactory().getHudDAO();
-                HUD aHud = hDao.buscar(new HUD(interfaceHud));
-                
-                Ranking rank = new Ranking(codigoRanking, dezPrimeirosPlayers, dezPrimeirosScores, dezPrimeirasDatas, aImagemFundo, aHud);
+                Ranking rank = new Ranking(codigoRanking, dezPrimeirosPlayers, dezPrimeirosScores, dezPrimeirasDatas, imagemFundo, interfaceHud);
                 listaRakings.add(rank);
             }
         } catch (SQLException ex) {

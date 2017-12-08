@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public interface NaveDAO {
     public Nave buscar(Nave nave);
+    public long buscarCodigo(Nave nave);
     
     public boolean inserir(Nave nave);
     public boolean alterar(Nave nave);

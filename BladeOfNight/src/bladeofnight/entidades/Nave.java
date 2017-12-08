@@ -16,6 +16,13 @@ public class Nave extends Imagem implements Entidade {
         this.velocidade = velocidade;
         this.poder = poder;
     }
+    
+    public Nave(String cor, char tipo, int velocidade, int poder) {
+        this.cor = cor;
+        this.tipo = tipo;
+        this.velocidade = velocidade;
+        this.poder = poder;
+    }
 
     public Nave(long codigoNave) {
         this.codigoNave = codigoNave;

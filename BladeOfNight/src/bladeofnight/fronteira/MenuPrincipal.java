@@ -28,6 +28,7 @@ public class MenuPrincipal {
             System.out.print("----> Escolha a sua opção: ");
 
             opcao = input.nextByte();
+
             ProcessarOpcaoUsuario(opcao);
         }
         System.out.println("\nPrograma encerrado.\n");
@@ -36,8 +37,8 @@ public class MenuPrincipal {
     private void ProcessarOpcaoUsuario(byte opcao) {
         switch (opcao) {
             case OPCAO_CADASTRO_RANKING:
-                CadastroRanking rank = new CadastroRanking();
-                rank.exibirMenu();
+                MenuRanking meuMenuRank = new MenuRanking();
+                meuMenuRank.exibirMenuRanking();
                 break;
             case OPCAO_CADASTRO_BACKGROUND:
                 CadastroBackground back = new CadastroBackground();

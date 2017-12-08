@@ -36,7 +36,7 @@ public abstract class Cadastro {
     
     protected abstract String obterMensagemSairDoMenu();
 
-    private void ProcessarOpcaoUsuario(short opcao) {
+    private void ProcessarOpcaoUsuario(byte opcao) {
         switch (opcao) {
             case OPCAO_INSERIR:
                 inserir();

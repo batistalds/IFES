@@ -26,7 +26,7 @@ public class CadastroBackground extends Cadastro {
     @Override
     protected boolean inserir() {
         System.out.println("\nInserindo novo registro de background\n");
-        
+        input.nextLine(); // Consumindo quebra de linha
         // MOVIMENTO X
         System.out.print("- Possui movimento no eixo X (horizontal) [S = Sim / N = Não]? ");
         char mX = input.nextLine().toUpperCase().charAt(0);
@@ -36,21 +36,25 @@ public class CadastroBackground extends Cadastro {
         char mY = input.nextLine().toUpperCase().charAt(0);
         boolean movimentoY = mY == 'S';
         
+        int velMoviX = 0;
         if (movimentoX) {
             // VELOCIDADE X
             System.out.print("- Informe a velocidade do movimento no eixo X (horizontal): ");
-            int velMoviX = input.nextInt();
+            velMoviX = input.nextInt();
             input.nextLine(); // Consumindo quebra de linha
+        } else {
+            
         }
         
+        int velMoviY = 0;
         if (movimentoY) {
             // VELOCIDADE Y
             System.out.print("- Informe a velocidade do movimento no eixo Y (vertical): ");
-            int velMoviY = input.nextInt();
+            velMoviY = input.nextInt();
             input.nextLine(); // Consumindo quebra de linha
         }
 
-        Background novoBack = new Background(mY, movimentoX, movimentoY, mX, mY);
+        Background novoBack = new Background(movimentoX, movimentoY, velMoviX, velMoviY);
         
         try {
             backgroundDAO.inserir(novoBack);
@@ -58,6 +62,7 @@ public class CadastroBackground extends Cadastro {
             return false;
         }
         
+        System.out.print("Cadastro executado com sucesso!");
         return true;
     }
 
@@ -70,7 +75,7 @@ public class CadastroBackground extends Cadastro {
         for (Background back : backgroundDAO.getLista()) {
             String temX = back.isMovimentoX() ? "Sim" : "Não";
             String temY = back.isMovimentoY() ? "Sim" : "Não";
-            System.out.printf("| %6d | %11s | %12d | %11s | %12d |\n", back.getCodigo(), temX, back.getVelMoviX(), temY, back.getVelMoviY());
+            System.out.printf("| %6d | %11s | %14d | %11s | %14d |\n", back.getCodigo(), temX, back.getVelMoviX(), temY, back.getVelMoviY());
         }
         System.out.println("+--------+-------------+----------------+-------------+----------------+");
     }
@@ -94,7 +99,7 @@ public class CadastroBackground extends Cadastro {
             if (opcaoMovX == 'S') {
                 // Como só existem duas opções possíveis para esse campo, podemos inverter automaticamente
                 haMovimentoX = !haMovimentoX;
-                System.out.print("Movimento X alterado para: " + (haMovimentoX ? "Sim" : "Não"));
+                System.out.println("Movimento X alterado para: " + (haMovimentoX ? "Sim" : "Não"));
             }
             // MOVIMENTO Y
             boolean haMovimentoY = backParaAlterar.isMovimentoY();
@@ -104,7 +109,7 @@ public class CadastroBackground extends Cadastro {
             if (opcaoMovY == 'S') {
                 // Como só existem duas opções possíveis para esse campo, podemos inverter automaticamente
                 haMovimentoY = !haMovimentoY;
-                System.out.print("Movimento Y alterado para: " + (haMovimentoY ? "Sim" : "Não"));
+                System.out.println("Movimento Y alterado para: " + (haMovimentoY ? "Sim" : "Não"));
             }
             // VELOCIDADE X
             int velX = backParaAlterar.getVelMoviX();
@@ -153,6 +158,7 @@ public class CadastroBackground extends Cadastro {
                     return false;
                 }
             } else {
+                System.out.println("\nBackground mantido.");
                 return false;
             }
 
@@ -210,13 +216,13 @@ public class CadastroBackground extends Cadastro {
         Background backEncontrado = backgroundDAO.buscar(backNovo);
         
         if (backEncontrado != null) {
-            System.out.println("\nBackground encontrado:\n");
+            System.out.print("\nBackground encontrado:\n");
             System.out.println("+--------+-------------+----------------+-------------+----------------+");
             System.out.println("| CÓDIGO | MOVIMENTO X |  VELOCIDADE X  | MOVIMENTO Y |  VELOCIDADE Y  |");
             System.out.println("+--------+-------------+----------------+-------------+----------------+");
             String temX = backEncontrado.isMovimentoX() ? "Sim" : "Não";
             String temY = backEncontrado.isMovimentoY() ? "Sim" : "Não";
-            System.out.printf("| %6d | %11s | %12d | %11s | %12d |\n", backEncontrado.getCodigo(), temX, backEncontrado.getVelMoviX(), temY, backEncontrado.getVelMoviY());
+            System.out.printf("| %6d | %11s | %14d | %11s | %14d |\n", backEncontrado.getCodigo(), temX, backEncontrado.getVelMoviX(), temY, backEncontrado.getVelMoviY());
             System.out.println("+--------+-------------+----------------+-------------+----------------+");
         } else {
             System.err.println("\nBackground não encontrado. Código inexistente.");

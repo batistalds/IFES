@@ -53,8 +53,7 @@ public class PgHudPrioridadeDAO implements HudPrioridadeDAO {
         try {
             Connection con = PostgreSqlDAOFactory.getConnection();
             PreparedStatement ps = con.prepareStatement(SCRIPT_INSERIR);
-            ps.setLong(1, hud.getCodigo());
-            ps.setInt(2, hud.getValorPrioridade());
+            ps.setInt(1, hud.getValorPrioridade());
             
             int resultadoDeLinhasAfetadas = ps.executeUpdate();
             return resultadoDeLinhasAfetadas == 1; // Como acrescenta-se uma linha à tabela, o resultado esperado para sucesso da execução é 1

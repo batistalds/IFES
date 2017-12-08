@@ -7,11 +7,19 @@ public class Ranking implements Entidade {
     private int dezPrimeirosPlayers;
     private int dezPrimeirosScores;
     private int dezPrimeirasDatas;
-    private Background imagemFundo;
-    private HUD interfaceHud;
+    private int imagemFundo;
+    private int interfaceHud;
 
-    public Ranking(long codigoRanking, int dezPrimeirosPlayers, int dezPrimeirosScores, int dezPrimeirasDatas, Background imagemFundo, HUD interfaceHud) {
+    public Ranking(long codigoRanking, int dezPrimeirosPlayers, int dezPrimeirosScores, int dezPrimeirasDatas, int imagemFundo, int interfaceHud) {
         this.codigoRanking = codigoRanking;
+        this.dezPrimeirosPlayers = dezPrimeirosPlayers;
+        this.dezPrimeirosScores = dezPrimeirosScores;
+        this.dezPrimeirasDatas = dezPrimeirasDatas;
+        this.imagemFundo = imagemFundo;
+        this.interfaceHud = interfaceHud;
+    }
+    
+    public Ranking(int dezPrimeirosPlayers, int dezPrimeirosScores, int dezPrimeirasDatas, int imagemFundo, int interfaceHud) {
         this.dezPrimeirosPlayers = dezPrimeirosPlayers;
         this.dezPrimeirosScores = dezPrimeirosScores;
         this.dezPrimeirasDatas = dezPrimeirasDatas;
@@ -40,11 +48,11 @@ public class Ranking implements Entidade {
         return dezPrimeirasDatas;
     }
 
-    public Background getImagemFundo() {
+    public int getImagemFundo() {
         return imagemFundo;
     }
 
-    public HUD getInterfaceHud() {
+    public int getInterfaceHud() {
         return interfaceHud;
     }
 
@@ -64,11 +72,11 @@ public class Ranking implements Entidade {
         this.dezPrimeirasDatas = dezPrimeirasDatas;
     }
 
-    public void setImagemFundo(Background imagemFundo) {
+    public void setImagemFundo(int imagemFundo) {
         this.imagemFundo = imagemFundo;
     }
 
-    public void setInterfaceHud(HUD interfaceHud) {
+    public void setInterfaceHud(int interfaceHud) {
         this.interfaceHud = interfaceHud;
     }
 }

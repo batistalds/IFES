@@ -3,6 +3,7 @@ package bladeofnight.fronteira;
 
 import bladeofnight.armazenamento.DAOFactory;
 import bladeofnight.armazenamento.HudDAO;
+import bladeofnight.entidades.HUD;
 
 public class CadastroHUD extends Cadastro {
     
@@ -26,139 +27,140 @@ public class CadastroHUD extends Cadastro {
     protected boolean inserir() {
         System.out.println("\nInserindo novo registro de HUD\n");
         
-        // PRIORIDADE DAS IMAGENS
-        System.out.println("Lista de Prioridades de Imagens cadastradas: ");
+        // PRIORIDADE DAS HUDS
         CadastroPrioridadeHUD hudP = new CadastroPrioridadeHUD();
         hudP.listar();
         // ESCOLHENDO UMA DAS PRIORIDADES ACIMA
-        System.out.print("- Informe o código do registro de Prioridade Imagem que deseja inserir nesta HUD: ");
-        int codigoPrioImg = input.nextInt();
+        System.out.print("- Código Prioridade: ");
+        long codPri = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
-        boolean existeHudP = hudP.buscar(codigoPrioImg);
+        boolean existeHudP = hudP.buscarComCodigo(codPri);
         
-        if (!existeHudP) {
-            System.out.print("Prioridade HUD não encontrada. Código inexistente ou inválido.");
-            return false;
-        }
+        if (!existeHudP) return false;
         
-        // MOVIMENTO Y
-        System.out.print("- Possui movimento no eixo Y (vertical) [S = Sim / N = Não]? ");
-        char mY = input.nextLine().toUpperCase().charAt(0);
-        boolean movimentoY = mY == 'S';
+        // TEXTO DAS HUDS
+        CadastroTextoHUD hudT = new CadastroTextoHUD();
+        hudT.listar();
+        // ESCOLHENDO UM DOS TEXTOS ACIMA
+        System.out.print("- Código Texto: ");
+        long codTexto = input.nextLong();
+        input.nextLine(); // Consumindo quebra de linha
+        boolean existeHudT = hudT.buscarComCodigo(codTexto);
         
-        if (movimentoX) {
-            // VELOCIDADE X
-            System.out.print("- Informe a velocidade do movimento no eixo X (horizontal): ");
-            int velMoviX = input.nextInt();
-            input.nextLine(); // Consumindo quebra de linha
-        }
+        if (!existeHudT) return false;
         
-        if (movimentoY) {
-            // VELOCIDADE Y
-            System.out.print("- Informe a velocidade do movimento no eixo Y (vertical): ");
-            int velMoviY = input.nextInt();
-            input.nextLine(); // Consumindo quebra de linha
-        }
+        // NÚMERO DAS HUDS
+        CadastroNumeroHUD hudN = new CadastroNumeroHUD();
+        hudN.listar();
+        // ESCOLHENDO UM DOS NÚMEROS ACIMA
+        System.out.print("- Código Número: ");
+        long codNum = input.nextLong();
+        input.nextLine(); // Consumindo quebra de linha
+        boolean existeHudN = hudN.buscarComCodigo(codNum);
+        
+        if (!existeHudN) return false;
 
-        Background novoBack = new Background(mY, movimentoX, movimentoY, mX, mY);
+        HUD novaHud = new HUD(codPri, codTexto, codNum);
         
         try {
-            hudDAO.inserir(novoBack);
+            hudDAO.inserir(novaHud);
         } catch (Exception e) {
             return false;
         }
         
+        System.out.print("\nRegistro inserido com sucesso!");
         return true;
     }
 
     @Override
     protected void listar() {
-        System.out.println("\nListagem de Backgrounds registrados\n");
-        System.out.println("+--------+-------------+----------------+-------------+----------------+");
-        System.out.println("| CÓDIGO | MOVIMENTO X |  VELOCIDADE X  | MOVIMENTO Y |  VELOCIDADE Y  |");
-        System.out.println("+--------+-------------+----------------+-------------+----------------+");
-        for (Background back : hudDAO.getLista()) {
-            String temX = back.isMovimentoX() ? "Sim" : "Não";
-            String temY = back.isMovimentoY() ? "Sim" : "Não";
-            System.out.printf("| %6d | %11s | %12d | %11s | %12d |\n", back.getCodigo(), temX, back.getVelMoviX(), temY, back.getVelMoviY());
+        System.out.println("\nListagem de HUDs registradas\n");
+        System.out.println("+--------+------------+-------+--------+");
+        System.out.println("| CÓDIGO | PRIORIDADE | TEXTO | NÚMERO |");
+        System.out.println("+--------+------------+-------+--------+");
+        for (HUD hd : hudDAO.getLista()) {
+            System.out.printf("| %6d | %10d | %5d | %6d |\n", hd.getCodigo(), hd.getPrioridadeImgs(), hd.getListaTextos(), hd.getListaNumeros());
         }
-        System.out.println("+--------+-------------+----------------+-------------+----------------+");
+        System.out.println("+--------+------------+-------+--------+");
     }
 
     @Override
     protected boolean alterar() {
-        System.out.println("\nAlterar o registro de Background de\n");
+        System.out.println("\nAlterar o registro de HUD de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
         
-        Background backNovo = new Background(codigo);
-        Background backParaAlterar = hudDAO.buscar(backNovo);
+        HUD hudNovo = new HUD(codigo);
+        HUD hudParaAlterar = hudDAO.buscar(hudNovo);
 
-        if (backParaAlterar != null) {
-            // MOVIMENTO X
-            boolean haMovimentoX = backParaAlterar.isMovimentoX();
-            System.out.println("\n - Movimento no eixo X (horizontal) existente?: " + (haMovimentoX ? "Sim" : "Não"));
+        if (hudParaAlterar != null) {
+            // PRIORIDADE
+            // LISTANDO AS OPÇÕES POSSÍVEIS
+            CadastroPrioridadeHUD hudP = new CadastroPrioridadeHUD();
+            hudP.listar();
+            // ALTERAÇÃO
+            long codPri = hudParaAlterar.getPrioridadeImgs();
+            System.out.println("\n - Código da Prioridade Atual: " + codPri);
             System.out.print("---> Deseja alterar? (s = sim / n = não): ");
-            char opcaoMovX = input.nextLine().toUpperCase().charAt(0);
-            if (opcaoMovX == 'S') {
-                // Como só existem duas opções possíveis para esse campo, podemos inverter automaticamente
-                haMovimentoX = !haMovimentoX;
-                System.out.print("Movimento X alterado para: " + (haMovimentoX ? "Sim" : "Não"));
+            char opcaoPri = input.nextLine().toUpperCase().charAt(0);
+            if (opcaoPri == 'S') {
+                // ESCOLHENDO UMA DAS PRIORIDADES ACIMA
+                System.out.print("- Novo Código Prioridade: ");
+                codPri = input.nextLong();
+                input.nextLine(); // Consumindo quebra de linha
+                boolean existeHudP = hudP.buscarComCodigo(codPri);
+
+                if (!existeHudP) return false;
             }
-            // MOVIMENTO Y
-            boolean haMovimentoY = backParaAlterar.isMovimentoY();
-            System.out.println("\n - Movimento no eixo Y (vertical) existente?: " + (haMovimentoY ? "Sim" : "Não"));
+            // TEXTO
+            // LISTANDO AS OPÇÕES POSSÍVEIS
+            CadastroTextoHUD hudT = new CadastroTextoHUD();
+            hudT.listar();
+            // ALTERAÇÃO
+            long codTxt = hudParaAlterar.getListaTextos();
+            System.out.println("\n - Código do Texto Atual: " + codTxt);
             System.out.print("---> Deseja alterar? (s = sim / n = não): ");
-            char opcaoMovY = input.nextLine().toUpperCase().charAt(0);
-            if (opcaoMovY == 'S') {
-                // Como só existem duas opções possíveis para esse campo, podemos inverter automaticamente
-                haMovimentoY = !haMovimentoY;
-                System.out.print("Movimento Y alterado para: " + (haMovimentoY ? "Sim" : "Não"));
+            char opcaoTxt = input.nextLine().toUpperCase().charAt(0);
+            if (opcaoTxt == 'S') {
+                // ESCOLHENDO UM DOS TEXTOS ACIMA
+                System.out.print("- Novo Código Texto: ");
+                codTxt = input.nextLong();
+                input.nextLine(); // Consumindo quebra de linha
+                boolean existeHudT = hudT.buscarComCodigo(codTxt);
+
+                if (!existeHudT) return false;
             }
-            // VELOCIDADE X
-            int velX = backParaAlterar.getVelMoviX();
-            if (haMovimentoX) {
-                System.out.println("\n - Velocidade X (horizontal) atual: " + Integer.toString(velX));
-                System.out.print("---> Deseja alterar? (s = sim / n = não): ");
-                char opcaoVelX = input.nextLine().toUpperCase().charAt(0);
-                if (opcaoVelX == 'S') {
-                    System.out.print("- Informe a nova Velocidade X: ");
-                    velX = input.nextInt();
-                    input.nextLine(); // Consumindo quebra de linha
-                }
-            } else {
-                // Se não houver movimento horizontal, velocidade será zerada
-                velX = 0;
-            }
-            // VELOCIDADE Y
-            int velY = backParaAlterar.getVelMoviY();
-            if (haMovimentoY) {
-                System.out.println("\n - Velocidade Y (vertical) atual: " + Integer.toString(velY));
-                System.out.print("---> Deseja alterar? (s = sim / n = não): ");
-                char opcaoVelY = input.nextLine().toUpperCase().charAt(0);
-                if (opcaoVelY == 'S') {
-                    System.out.print("- Informe a nova Velocidade Y: ");
-                    velY = input.nextInt();
-                    input.nextLine(); // Consumindo quebra de linha
-                }
-            } else {
-                // Se não houver movimento vertical, velocidade será zerada
-                velY = 0;
+            // NÚMERO
+            // LISTANDO AS OPÇÕES POSSÍVEIS
+            CadastroNumeroHUD hudN = new CadastroNumeroHUD();
+            hudN.listar();
+            // ALTERAÇÃO
+            long codNum = hudParaAlterar.getListaNumeros();
+            System.out.println("\n - Código do Número Atual: " + codNum);
+            System.out.print("---> Deseja alterar? (s = sim / n = não): ");
+            char opcaoNum = input.nextLine().toUpperCase().charAt(0);
+            if (opcaoNum == 'S') {
+                // ESCOLHENDO UM DOS TEXTOS ACIMA
+                System.out.print("- Novo Código Número: ");
+                codNum = input.nextLong();
+                input.nextLine(); // Consumindo quebra de linha
+                boolean existeHudN = hudN.buscarComCodigo(codNum);
+
+                if (!existeHudN) return false;
             }
             // CONFIRMAÇÃO FINAL
             System.out.println("\nDeseja realmente modificar os dados informados? (s = sim / n = não)");
-            System.out.println("- Código.......: " + backParaAlterar.getCodigo());
-            System.out.println("- Movimento X..: " + (haMovimentoX ? "Sim" : "Não"));
-            System.out.println("- Movimento Y..: " + (haMovimentoY ? "Sim" : "Não"));
-            System.out.println("- Velocidade X.: " + velX);
-            System.out.println("- Velocidade Y.: " + velY);
+            System.out.println("- Código....: " + codigo);
+            System.out.println("- Prioridade: " + codPri);
+            System.out.println("- Texto.....: " + codTxt);
+            System.out.println("- Número....: " + codNum);
             System.out.print("---> (s = sim / n = não): ");
             char confirmacaoFinal = input.nextLine().toUpperCase().charAt(0);
             if (confirmacaoFinal == 'S') {
-                Background backAlterado = new Background(codigo, haMovimentoX, haMovimentoY, velX, velY);                
+                HUD hudAlterado = new HUD(codigo, codPri, codTxt, codNum);
                 try {
-                    hudDAO.alterar(backAlterado);
+                    hudDAO.alterar(hudAlterado);
                 } catch (Exception e) {
                     return false;
                 }
@@ -167,7 +169,7 @@ public class CadastroHUD extends Cadastro {
             }
 
         } else {
-            System.err.println("\nBackground não encontrado. Código inexistente.");
+            System.err.println("\nHUD não encontrada. Código inexistente.");
             return false;
         }
         
@@ -176,29 +178,28 @@ public class CadastroHUD extends Cadastro {
 
     @Override
     protected boolean excluir() {
-        System.out.println("\nExcluir o registro do Background de\n");
+        System.out.println("\nExcluir o registro da HUD de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
         
-        Background backParaDeletar = hudDAO.buscar(new Background(codigo));
+        HUD hudParaDeletar = hudDAO.buscar(new HUD(codigo));
 
-        if (backParaDeletar == null) {
-            System.err.println("Background não encontrado. Código inexistente.");
+        if (hudParaDeletar == null) {
+            System.err.println("HUD não encontrada. Código inexistente.");
             return false;
         }
 
-        System.out.println("\nDeseja realmente excluir o Background informado? (s = sim / n = não)");
-        System.out.println("- Código......: " + backParaDeletar.getCodigo());
-        System.out.println("- Movimento X.: " + (backParaDeletar.isMovimentoX() ? "Sim" : "Não"));
-        System.out.println("- Movimento Y.: " + (backParaDeletar.isMovimentoY() ? "Sim" : "Não"));
-        System.out.println("- Velocidade X: " + backParaDeletar.getVelMoviX());
-        System.out.println("- Velocidade Y: " + backParaDeletar.getVelMoviY());
+        System.out.println("\nDeseja realmente excluir a HUD informada? (s = sim / n = não)");
+        System.out.println("- Código....: " + codigo);
+        System.out.println("- Prioridade: " + hudParaDeletar.getPrioridadeImgs());
+        System.out.println("- Texto.....: " + hudParaDeletar.getListaTextos());
+        System.out.println("- Número....: " + hudParaDeletar.getListaNumeros());
         System.out.print("---> (s = sim / n = não): ");
         char confirmacaoFinal = input.nextLine().toUpperCase().charAt(0);
         if (confirmacaoFinal == 'S') {
             try {
-                hudDAO.excluir(backParaDeletar);
+                hudDAO.excluir(hudParaDeletar);
             } catch (Exception e) {
                 return false;
             }
@@ -210,27 +211,28 @@ public class CadastroHUD extends Cadastro {
     }
     
     @Override
-    protected void buscar() {
-        System.out.println("\nBuscar o registro de Background de\n");
+    protected boolean buscar() {
+        System.out.println("\nBuscar o registro de HUD de\n");
         System.out.print("- Código: ");
         long codigo = input.nextLong();
         input.nextLine(); // Consumindo quebra de linha
         
-        Background backNovo = new Background(codigo);
-        Background backEncontrado = hudDAO.buscar(backNovo);
+        HUD hudNovo = new HUD(codigo);
+        HUD hudEncontrada = hudDAO.buscar(hudNovo);
         
-        if (backEncontrado != null) {
-            System.out.println("\nBackground encontrado:\n");
-            System.out.println("+--------+-------------+----------------+-------------+----------------+");
-            System.out.println("| CÓDIGO | MOVIMENTO X |  VELOCIDADE X  | MOVIMENTO Y |  VELOCIDADE Y  |");
-            System.out.println("+--------+-------------+----------------+-------------+----------------+");
-            String temX = backEncontrado.isMovimentoX() ? "Sim" : "Não";
-            String temY = backEncontrado.isMovimentoY() ? "Sim" : "Não";
-            System.out.printf("| %6d | %11s | %12d | %11s | %12d |\n", backEncontrado.getCodigo(), temX, backEncontrado.getVelMoviX(), temY, backEncontrado.getVelMoviY());
-            System.out.println("+--------+-------------+----------------+-------------+----------------+");
+        if (hudEncontrada != null) {
+            System.out.println("\nHUD encontrada:\n");
+            System.out.println("+--------+------------+-------+--------+");
+            System.out.println("| CÓDIGO | PRIORIDADE | TEXTO | NÚMERO |");
+            System.out.println("+--------+------------+-------+--------+");
+            System.out.printf("| %6d | %10d | %5d | %6d |\n", hudEncontrada.getCodigo(), hudEncontrada.getPrioridadeImgs(), hudEncontrada.getListaTextos(), hudEncontrada.getListaNumeros());
+            System.out.println("+--------+------------+-------+--------+");
         } else {
-            System.err.println("\nBackground não encontrado. Código inexistente.");
-        }        
+            System.err.println("\nHUD não encontrada. Código inexistente.");
+            return false;
+        }
+        
+        return true;
     }
     
 }

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public interface InimigoDAO {
     public Inimigo buscar(Inimigo inimigo);
+    public long buscarCodigo(Inimigo inimigo);
+    public long buscarCodigoComNave(long codNave);
     
     public boolean inserir(Inimigo inimigo);
     public boolean alterar(Inimigo inimigo);

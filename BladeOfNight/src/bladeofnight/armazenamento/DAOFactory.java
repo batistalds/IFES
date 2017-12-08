@@ -38,6 +38,11 @@ public abstract class DAOFactory {
     public abstract ProjetilDAO getProjetilDAO();
     public abstract RankingDAO getRankingDAO();
     public abstract HudPrioridadeDAO getHudPrioridadeDAO();
+    public abstract HudTextoDAO getHudTextoDAO();
+    public abstract HudNumeroDAO getHudNumeroDAO();
+    public abstract RankingDezPlayersDAO getRankingDezPlayersDAO();
+    public abstract RankingDezScoresDAO getRankingDezScoresDAO();
+    public abstract RankingDezDatasDAO getRankingDezDatasDAO();
     
     public ArrayList<Entidade> lista;
     

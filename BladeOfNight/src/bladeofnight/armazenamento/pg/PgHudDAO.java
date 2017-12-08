@@ -55,9 +55,9 @@ public class PgHudDAO implements HudDAO {
         try {
             Connection con = PostgreSqlDAOFactory.getConnection();
             PreparedStatement ps = con.prepareStatement(SCRIPT_INSERIR);
-            ps.setInt(1, hud.getPrioridadeImgs());
-            ps.setInt(2, hud.getListaTextos());
-            ps.setInt(3, hud.getListaNumeros());
+            ps.setLong(1, hud.getPrioridadeImgs());
+            ps.setLong(2, hud.getListaTextos());
+            ps.setLong(3, hud.getListaNumeros());
             
             int resultadoDeLinhasAfetadas = ps.executeUpdate();
             return resultadoDeLinhasAfetadas == 1; // Como acrescenta-se uma linha à tabela, o resultado esperado para sucesso da execução é 1
@@ -73,9 +73,9 @@ public class PgHudDAO implements HudDAO {
         try {
             Connection con = PostgreSqlDAOFactory.getConnection();
             PreparedStatement ps = con.prepareStatement(SCRIPT_ALTERAR);
-            ps.setInt(1, hud.getPrioridadeImgs());
-            ps.setInt(2, hud.getListaTextos());
-            ps.setInt(3, hud.getListaNumeros());
+            ps.setLong(1, hud.getPrioridadeImgs());
+            ps.setLong(2, hud.getListaTextos());
+            ps.setLong(3, hud.getListaNumeros());
             ps.setLong(4, hud.getCodigo());
             
             int resultadoDeLinhasAfetadas = ps.executeUpdate();
@@ -119,9 +119,9 @@ public class PgHudDAO implements HudDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 long codigo = rs.getLong(1);
-                int prioridadeImgs = rs.getInt(2);
-                int listaTextos = rs.getInt(3);
-                int listaNumeros = rs.getInt(4);
+                long prioridadeImgs = rs.getLong(2);
+                long listaTextos = rs.getLong(3);
+                long listaNumeros = rs.getLong(4);
                 
                 HUD hud = new HUD(codigo, prioridadeImgs, listaTextos, listaNumeros);
                 listaHUDs.add(hud);

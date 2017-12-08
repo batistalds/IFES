@@ -5,17 +5,28 @@ public class Jogador extends Nave {
     
     private long codigoJogador;
     private String nomeJogador;
+    private long naveId;
 
-    public Jogador(long codigoJogador, String nomeJogador, long codigoNave, String cor, char tipo, int velocidade, int poder) {
-        super(codigoNave, cor, tipo, velocidade, poder);
-        this.codigoJogador = codigoJogador;
-        this.nomeJogador = nomeJogador;
+    public Jogador(long codigoNave) {
+        super(codigoNave);
     }
-
-    public Jogador(long codigoJogador, String nomeJogador, long codigoNave) {
+    
+    public Jogador(long codigoNave, long codigoJogador) {
+        super(codigoNave);
+        this.codigoJogador = codigoJogador;
+    }
+    
+    public Jogador(long codigoNave, String nomeJogador) {
+        super(codigoNave);
+        this.nomeJogador = nomeJogador;
+        this.naveId = codigoNave;
+    }
+    
+    public Jogador(long codigoJogador, long codigoNave, String nomeJogador) {
         super(codigoNave);
         this.codigoJogador = codigoJogador;
         this.nomeJogador = nomeJogador;
+        this.naveId = codigoNave;
     }
 
     @Override
@@ -34,6 +45,14 @@ public class Jogador extends Nave {
 
     public void setNomeJogador(String nomeJogador) {
         this.nomeJogador = nomeJogador;
+    }
+
+    public long getNaveId() {
+        return naveId;
+    }
+
+    public void setNaveId(long naveId) {
+        this.naveId = naveId;
     }
 
 }

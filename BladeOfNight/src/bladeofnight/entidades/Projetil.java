@@ -18,6 +18,14 @@ public class Projetil extends Imagem implements Entidade {
         this.delay = delay;
         this.poder = poder;
     }
+    
+    public Projetil(int velX, int velY, int angulo, double delay, int poder) {
+        this.velX = velX;
+        this.velY = velY;
+        this.angulo = angulo;
+        this.delay = delay;
+        this.poder = poder;
+    }
 
     public Projetil(long codigoProjetil) {
         this.codigoProjetil = codigoProjetil;

@@ -26,7 +26,6 @@ public class MenuHUD {
             opcao = input.nextByte();
             ProcessarOpcaoUsuario(opcao);
         }
-        System.out.println("\nPrograma encerrado.\n");
     }
     
     private void ProcessarOpcaoUsuario(byte opcao) {

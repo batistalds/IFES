@@ -5,13 +5,18 @@ import bladeofnight.armazenamento.BackgroundDAO;
 import bladeofnight.armazenamento.BossDAO;
 import bladeofnight.armazenamento.DAOFactory;
 import bladeofnight.armazenamento.HudDAO;
+import bladeofnight.armazenamento.HudNumeroDAO;
 import bladeofnight.armazenamento.HudPrioridadeDAO;
+import bladeofnight.armazenamento.HudTextoDAO;
 import bladeofnight.armazenamento.InimigoDAO;
 import bladeofnight.armazenamento.ItemDAO;
 import bladeofnight.armazenamento.JogadorDAO;
 import bladeofnight.armazenamento.NaveDAO;
 import bladeofnight.armazenamento.ProjetilDAO;
 import bladeofnight.armazenamento.RankingDAO;
+import bladeofnight.armazenamento.RankingDezPlayersDAO;
+import bladeofnight.armazenamento.RankingDezScoresDAO;
+import bladeofnight.armazenamento.RankingDezDatasDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,7 +26,7 @@ public class PostgreSqlDAOFactory extends DAOFactory {
     
     private static Connection con;
     
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/BladeNight";
+    private static final String DB_URL = "jdbc:postgresql://localhost:5433/game";
     private static final String DB_USER = "postgres";
     private static final String DB_PASSWORD = "postgres";
     
@@ -88,5 +93,29 @@ public class PostgreSqlDAOFactory extends DAOFactory {
     public HudPrioridadeDAO getHudPrioridadeDAO() {
         return new PgHudPrioridadeDAO();
     }
+
+    @Override
+    public HudTextoDAO getHudTextoDAO() {
+        return new PgHudTextoDAO();
+    }
+
+    @Override
+    public HudNumeroDAO getHudNumeroDAO() {
+        return new PgHudNumeroDAO();
+    }
+
+    @Override
+    public RankingDezPlayersDAO getRankingDezPlayersDAO() {
+        return new PgRankingDezPlayersDAO();
+    }
     
+    @Override
+    public RankingDezScoresDAO getRankingDezScoresDAO() {
+        return new PgRankingDezScoresDAO();
+    }
+    
+    @Override
+    public RankingDezDatasDAO getRankingDezDatasDAO() {
+        return new PgRankingDezDatasDAO();
+    }
 }

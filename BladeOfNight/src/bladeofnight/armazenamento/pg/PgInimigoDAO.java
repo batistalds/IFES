@@ -22,8 +22,11 @@ public class PgInimigoDAO implements InimigoDAO {
     
     private static final String SCRIPT_EXCLUIR = "DELETE FROM Inimigo WHERE codigo = ?";
     
-    private static final String SCRIPT_GETLISTA = "SELECT codigo, nome, tipo, nave " +
+    private static final String SCRIPT_GETLISTA = "SELECT * " +
                                                   "FROM Inimigo ";
+    
+    private static final String SCRIPT_BUSCARCODIGO = "SELECT * FROM Inimigo WHERE nome = ? AND tipo = ? AND nave = ?";
+    private static final String SCRIPT_BUSCARCODIGO_NAVE = "SELECT * FROM Inimigo WHERE nave = ?";
     
     @Override
     public Inimigo buscar(Inimigo inimigo) {
@@ -40,7 +43,7 @@ public class PgInimigoDAO implements InimigoDAO {
                 char tipo = rs.getString(3).charAt(0);
                 long nave = rs.getLong(4);
                 
-                Inimigo inimigoEncontrado = new Inimigo(codigoInimigo, nome, tipo, nave);
+                Inimigo inimigoEncontrado = new Inimigo(codigoInimigo, nave, nome, tipo);
                 return inimigoEncontrado;
             }
         } catch (SQLException ex) {
@@ -48,6 +51,48 @@ public class PgInimigoDAO implements InimigoDAO {
         }
         
         return null;
+    }
+    
+    @Override
+    public long buscarCodigo(Inimigo inimigo) {
+        try {
+            Connection con = PostgreSqlDAOFactory.getConnection();
+            PreparedStatement ps = con.prepareStatement(SCRIPT_BUSCARCODIGO);
+            ps.setString(1, inimigo.getNomeInimigo());
+            ps.setString(2, Character.toString(inimigo.getTipoInimigo()));
+            ps.setLong(3, inimigo.getNaveId());
+            // Adquirindo resultado da Query após sua execução
+            ResultSet rs = ps.executeQuery();
+            // Pulamos para a primeira Linha resultada da Query, se houver alguma coisa, quer dizer que retornamos alguma coisa (não vazio)
+            if (rs.next()) {
+                long codigoInimigo = rs.getLong(1);
+                return codigoInimigo;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao obter o código de um registro de inimigo", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return -1;
+    }
+    
+    @Override
+    public long buscarCodigoComNave(long codNave) {
+        try {
+            Connection con = PostgreSqlDAOFactory.getConnection();
+            PreparedStatement ps = con.prepareStatement(SCRIPT_BUSCARCODIGO_NAVE);
+            ps.setLong(1, codNave);
+            // Adquirindo resultado da Query após sua execução
+            ResultSet rs = ps.executeQuery();
+            // Pulamos para a primeira Linha resultada da Query, se houver alguma coisa, quer dizer que retornamos alguma coisa (não vazio)
+            if (rs.next()) {
+                long codigoInimigo = rs.getLong(1);
+                return codigoInimigo;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao obter o código de um registro de inimigo", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return -1;
     }
 
     @Override
@@ -57,7 +102,7 @@ public class PgInimigoDAO implements InimigoDAO {
             PreparedStatement ps = con.prepareStatement(SCRIPT_INSERIR);
             ps.setString(1, inimigo.getNomeInimigo());
             ps.setString(2, Character.toString(inimigo.getTipoInimigo()));
-            ps.setLong(3, inimigo.getCodigo());
+            ps.setLong(3, inimigo.getNaveId());
             
             int resultadoDeLinhasAfetadas = ps.executeUpdate();
             return resultadoDeLinhasAfetadas == 1; // Como acrescenta-se uma linha à tabela, o resultado esperado para sucesso da execução é 1
@@ -75,7 +120,7 @@ public class PgInimigoDAO implements InimigoDAO {
             PreparedStatement ps = con.prepareStatement(SCRIPT_ALTERAR);
             ps.setString(1, inimigo.getNomeInimigo());
             ps.setString(2, Character.toString(inimigo.getTipoInimigo()));
-            ps.setLong(3, inimigo.getCodigo());
+            ps.setLong(3, inimigo.getNaveId());
             ps.setLong(4, inimigo.getCodigo());
             
             int resultadoDeLinhasAfetadas = ps.executeUpdate();
@@ -123,7 +168,7 @@ public class PgInimigoDAO implements InimigoDAO {
                 char tipo = rs.getString(3).charAt(0);
                 long nave = rs.getLong(4);
                 
-                Inimigo inimigo = new Inimigo(codigoInimigo, nome, tipo, nave);
+                Inimigo inimigo = new Inimigo(codigoInimigo, nave, nome, tipo);
                 listaInimigos.add(inimigo);
             }
         } catch (SQLException ex) {

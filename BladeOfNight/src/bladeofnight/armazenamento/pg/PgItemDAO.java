@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 public class PgItemDAO implements ItemDAO {
     
-    private static final String SCRIPT_BUSCAR = "SELECT codigo, nome, efeito, velY" +
+    private static final String SCRIPT_BUSCAR = "SELECT *" +
                                                 "FROM Item " +
                                                 "WHERE codigo = ?";
     
@@ -30,7 +30,7 @@ public class PgItemDAO implements ItemDAO {
         try {
             Connection con = PostgreSqlDAOFactory.getConnection();
             PreparedStatement ps = con.prepareStatement(SCRIPT_BUSCAR);
-            ps.setLong(1, item.getCodigo());            
+            ps.setLong(1, item.getCodigo());
             // Adquirindo resultado da Query após sua execução
             ResultSet rs = ps.executeQuery();
             // Pulamos para a primeira Linha resultada da Query, se houver alguma coisa, quer dizer que retornamos alguma coisa (não vazio)
